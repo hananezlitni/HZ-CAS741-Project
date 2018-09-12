@@ -1,1 +1,1 @@
-# A Library of Simplex Method Solvers
+# A Library for Solving the Simplex Method
