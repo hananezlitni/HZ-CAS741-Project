@@ -1,5 +1,5 @@
-# Documentation folders
+# Documentation Folders
 
 The folders and files for this folder are as follows:
 
-Describe ...
+1. ProblemStatement: contains the project's problem statement
