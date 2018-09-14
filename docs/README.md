@@ -2,4 +2,4 @@
 
 The folders and files for this folder are as follows:
 
-1. <b>ProblemStatement:</b> contains the project's problem statement
+<b>1. ProblemStatement:</b> contains the project's problem statement
