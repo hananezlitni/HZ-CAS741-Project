@@ -88,7 +88,7 @@
 
 \begin{document}
 
-\title{A Library of Simplex Method Solvers} 
+\title{Commonality Analysis of a Library of Simplex Method Solvers} 
 \author{Hanane Zlitni}
 \date{October 4, 2018}
 
@@ -103,6 +103,8 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 	\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 	\midrule
+	October 13, 2018 & 1.1 & Applied most of the comments obtained from 
+	Jennifer Garner's review\\
 	October 4, 2018 & 1.0 & First Draft\\
 	\bottomrule
 \end{tabularx}
@@ -127,6 +129,9 @@ The table that follows summarizes the symbols used in this document.
 \textbf{symbol} & \textbf{unit} & \textbf{description}\\
 \midrule 
 	$Z$ & - & Optimal solution of the objective function\\
+	$Z'$ & - & The negation of the objective function\\
+	$R$ & - & The set of real numbers\\
+	$N$ & - & The set of natural numbers\\
 \bottomrule
 \end{longtable*}
 
@@ -150,7 +155,7 @@ The table that follows summarizes the symbols used in this document.
   CA & Commonality Analysis\\
   \famname{} & Library of Simplex Method Solvers\\
   T & Theoretical Model\\
-  s.t. & Subject to\\
+  $s.\;t.$ & Subject to\\
   \bottomrule
 \end{tabular}\\
 
@@ -180,9 +185,11 @@ software that facilitates solving objective functions using the simplex method
 for different purposes can be useful. 
 
 This commonality analysis (CA) provides detailed documentation of a 
-general-purpose program family, called \famname{}, that solves linear 
-programming problems using the simplex method. The CA template is based on 
-\citet{Smith2006}.
+general-purpose program family, called \famname{} (Library of Simplex Method 
+Solvers), that solves linear programming problems using the simplex method. The 
+reason for choosing this specific algorithm is because of its high efficiency, 
+its numerous applications and its influence in various fields including science 
+and engineering. The CA template is based on \citet{Smith2006}.
 
 \subsection{Purpose of Document}
 
@@ -294,7 +301,18 @@ easier to correctly understand the requirements:
 	
 	\item Objective function: The function to be minimized or maximized.
 	
-	\item Decision variables: ${x_1}$, ${x_2}$, ..., ${x_n}$
+	\item Objective function goal: The choice of minimizing or maximizing the 
+	objective function.
+	
+	\item Linear constraints: Linear constraints are some of the main inputs 
+	needed to solve a linear programming problem. They can be equalities or 
+	inequalities. There are two types of linear constraints: \textit{main 
+	constraints} (e.g. $2x_1 + 3x_2 \leq 10$) and \textit{non-negativity 
+	constraints} (e.g. $x_1, x_2 \geq 0$).
+	
+	\item Decision variables: They are variables that represent the parameters 
+	that the user wishes to optimize, and they are written as: ${x_1}$, 
+	${x_2}$, ..., ${x_k}$, where $k \in N$.
 	
 	\item Feasible solution: The point that satisfies all constraints and sign 
 	restrictions.
@@ -356,16 +374,16 @@ models. The dimension of each quantity is also given.
 		Symbol & - \\
 		\hline
 		Equation& $\begin{bmatrix}
-		a_{11} & a_{12} & a_{13} & \dots & b_{1}\\
-		a_{21} & a_{22} & a_{23} & \dots & b_{2}\\
-		\vdots & \vdots & \vdots & &\vdots\\
-		\vdots & \vdots & \vdots & &\vdots\\
-		a_{n1} & a_{n2} & a_{n3} & \dots & b_{m}	
-		\end{bmatrix}$ \\
+		a_{11} & a_{12} & a_{13} & a_{14} & \dots & b_{1}\\
+		a_{21} & a_{22} & a_{23} & a_{24} & \dots & b_{2}\\
+		\vdots & \vdots & \vdots & \vdots & \dots & \vdots\\
+		\vdots & \vdots & \vdots & \vdots & \dots & \vdots\\
+		a_{n1} & a_{n2} & a_{n3} & a_{n4} & \dots & b_{n}	
+		\end{bmatrix}$ , where: $a, b \in R$ and $n$ = the row number\\
 		\hline
 		Description & 
-		The simplex tableau is the augmented matrix of the linear program's 
-		equations.\\
+		The simplex tableau is the augmented matrix form that \famname{} 
+		creates from the linear program's equations.\\
 		\hline
 		Sources& -\\
 		\hline
@@ -389,17 +407,18 @@ models. The dimension of each quantity is also given.
 		\hline
 		Symbol & $S_n$\\
 		\hline
-		Equation& $a_1x_1 + a_2x_2\;{\leq}\;b_m$ becomes $a_1x_1 + a_2x_2 + S_n 
-		= b_m$ \\
+		Equation& $a_1x_1 + a_2x_2\;{\leq}\;b_n$ becomes $a_1x_1 + a_2x_2 + S_n 
+		= b_n$ \\
 		\hline
 		Description & 
-		The slack variable is a non-negative variable that is added to less 
-		than or equal to inequalities so they become equalities.
+		The slack variable is a variable that represents zero or a positive 
+		real number. It is added to less than or equal to inequalities so they 
+		become equalities.
 		\\
 		\hline
 		Sources& \cite{lp-defs}\\
 		\hline
-		Ref.\ By & \iref{maxLP}, \aref{A_nonnegative}\\
+		Ref.\ By & \iref{maxLP}\\
 		\hline
 	\end{tabular}
 \end{minipage}\\
@@ -434,19 +453,20 @@ on.
 	  	\hline
 	  	Equation&\[
 		  \left\{ \begin{array}{c}
-		  max\;Z=\;\;\;c_{1}x_1 + c_{2}x_2 + ........ + c_{n}x_n \\ 
+		  max\;Z=\;\;\;c_{1}x_1 + c_{2}x_2 + ........ + c_{k}x_k \\ 
 		  s.\;t.\;\;\;\; a_{11}x_1 + a_{12}x_2 + ........ + 
-		  a_{1n}x_n\;{\leq}\;b_1 
+		  a_{1m}x_k\;{\leq}\;b_1 
 		  \\
 		  \hspace{1.3cm}\vdots \hspace{1.2cm}\vdots \hspace{2.6cm}\vdots 
 		  \hspace{1.5cm}\vdots \\
-		  \;\;\;\;\;\;\;\;\; a_{m1}x_1 + a_{m2}x_2 + ........ + 
-		  a_{mn}x_n\;{\leq}\;b_m 
+		  \;\;\;\;\;\;\;\;\; a_{n1}x_1 + a_{n2}x_2 + ........ + 
+		  a_{nm}x_k\;{\leq}\;b_n 
 		  \\
-		  x_1, x_2 + ........ + x_n\;{\geq}\;0 \\
+		  x_1, x_2 + ........ + x_k\;{\geq}\;0 \\
 		  \end{array}
 		  \right. 
-		  \]\\
+		  \] , where: $c, a, b \in R$ ; $k \in N$ ; $n$ = the row number ; $m$ 
+		  = the column number\\
 	  	\hline
 	  	Description & 
 	      A linear program is in its standard form when it satisfies the 
@@ -457,7 +477,7 @@ on.
 	        
 	        \item All constraints are inequalities
 	        
-	        \item All decision variables are non-negative
+	        \item All decision variables are greater than or equal to zero.
 	      \end{itemize}\\
 	  	\hline
 	  	Source & \cite{lp-defs}\\
@@ -482,17 +502,18 @@ on.
 		Equation&\[
 		\left\{ 
 		\begin{array}{c}
-		max\;Z=\;\;\;c_{1}x_1 + c_{2}x_2 + ........ + c_{n}x_n \\ 
+		max\;Z=\;\;\;c_{1}x_1 + c_{2}x_2 + ........ + c_{k}x_k \\ 
 		s.\;t.\;\;\;\; a_{11}x_1 + a_{12}x_2 + ........ + 
-		a_{1n}x_n\;=\;b_1 \\
+		a_{1m}x_k\;=\;b_1 \\
 		\hspace{1.3cm}\vdots \hspace{1.2cm}\vdots 
 		\hspace{2.6cm}\vdots \hspace{1.5cm}\vdots \\
-		\;\;\;\;\;\;\;\;\; a_{m1}x_1 + a_{m2}x_2 + ........ + 
-		a_{mn}x_n\;=\;b_m \\
-		x_1, x_2 + ........ + x_n\;{\geq}\;0 \\
+		\;\;\;\;\;\;\;\;\; a_{n1}x_1 + a_{n2}x_2 + ........ + 
+		a_{nm}x_k\;=\;b_n \\
+		x_1, x_2 + ........ + x_k\;{\geq}\;0 \\
 		\end{array}
 		\right. 
-		\]\\
+		\] , where: $c, a, b \in R$ ; $k \in N$ ; $n$ = the row number ; $m$ 
+		= the column number\\
 		\hline
 		Description & 
 		A standard linear program is in its canonical form when it satisfies 
@@ -524,18 +545,18 @@ on.
 		Equation&$\begin{bmatrix}
 		a_{11} & a_{12} & a_{13} & \dots & b_{1}\\
 		\vdots & \vdots & \vdots & &\vdots\\
-		a_{n1} & a_{n2} & a_{n3} & \dots & b_{m}	
-		\end{bmatrix}$ \newline \newline
-		Let $R_1$ = the first row in the matrix ; $R_n$ = the $n^{th}$ row in 
-		the matrix: \newline
-		Pivoting includes one or more of the following operations: \newline
+		a_{n1} & a_{n2} & a_{n3} & \dots & b_{n}	
+		\end{bmatrix}$ , where: $a \in R$ \newline \newline
+		Let $R_i$ and $R_j$ be any two rows in the matrix, $i, j \in N$: 
+		\newline
+		Pivoting includes one or more of the following operations:
 		\begin{itemize}
-			\item Row switching: $R_1 \xleftrightarrow{} R_n$
+			\item Row switching: $R_i \xleftrightarrow{} R_j$
 			
-			\item Row addition: $R_1$ + $R_n$
+			\item Row addition: $R_i$ + $R_j$
 			
-			\item Multiplying a row by a non-zero constant: $aR_n$ ; 
-			$a \neq 0$
+			\item Multiplying a row by a non-zero constant: $kR_i$ ; 
+			$k \neq 0$
 		\end{itemize} \\
 		\hline
 		Description & 
@@ -576,17 +597,19 @@ mathematical terms.
 		\hline
 		Input& 
 		\begin{enumerate}
-			\item Max objective function: $max\;Z=\;c_{1}x_1 + c_{2}x_2 + ... + 
-			c_{n}x_n$
+			\item Max objective function in the following form: 
+			\newline$max\;Z=\;c_{1}x_1 + c_{2}x_2 + ... + c_{k}x_k$
 			
-			\item Linear constraint(s): 
-			\newline$a_{m1}x_1 + a_{m2}x_2 + ... + a_{mn}x_n\;{\leq}\;b_m$
-			\newline$x_1, ..., x_n\;{\geq}\;0$
-		\end{enumerate}\\
+			\item Linear constraint(s) in the following form: 
+			\newline$a_{11}x_1 + a_{12}x_2 + ... + a_{nm}x_k\;{\leq}\;b_n$
+			\newline$x_1, ..., x_k\;{\geq}\;0$
+		\end{enumerate} , where: $c, a, b \in R$ ; $k, n, m \in N$\\
 		\hline
 		Output& The optimal solution $Z$\\
 		\hline
-		Description& 
+		Description& The purpose of this instance model is to provide details 
+		about solving linear programs that intend to maximize a parameter. The 
+		steps to solve a maximization problem are:
 		\begin{enumerate}
 			\item Convert linear program to its canonical form using slack 
 			variables.
@@ -627,20 +650,22 @@ mathematical terms.
 		\hline
 		Input& 
 		\begin{enumerate}
-			\item Min objective function: $min\;Z=\;c_{1}x_1 + c_{2}x_2 + ... + 
-			c_{n}x_n$
+			\item Min objective function in the following form: 
+			\newline$min\;Z=\;c_{1}x_1 + c_{2}x_2 + ... + c_{k}x_k$
 			
-			\item Linear constraint(s): 
-			\newline$a_{m1}x_1 + a_{m2}x_2 + ... + a_{mn}x_n\;{\leq}\;b_m$
-			\newline$x_1, ..., x_n\;{\geq}\;0$
-		\end{enumerate}\\
+			\item Linear constraint(s) in the following form: 
+			\newline$a_{11}x_1 + a_{12}x_2 + ... + a_{nm}x_k\;{\leq}\;b_n$
+			\newline$x_1, ..., x_k\;{\geq}\;0$
+		\end{enumerate} , where: $c, a, b \in R$ ; $k, n, m \in N$\\
 		\hline
 		Output& The optimal solution $Z$\\
 		\hline
-		Description& 
+		Description& The purpose of this instance model is to provide details 
+		about solving linear programs that intend to minimize a parameter. The 
+		steps to solve a minimization problem are:
 		\begin{enumerate}
 			\item Convert the minimization linear program to a maximization 
-			linear program.
+			linear program by finding $Z'$ defined in \ddref{minToMax}.
 			
 			\item Solve \iref{maxLP}.
 		\end{enumerate}
@@ -660,12 +685,12 @@ mathematical terms.
 \subsection{Assumptions}
 
 \begin{itemize}
-	\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_nonnegative}:] The 
-	 decision and slack variables are non-negative.
+	\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_objFunSpace}:] The 
+	objective function $Z \in R$.
 	
 	\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_inequalities}:] If 
 	the linear constraints are inequalities, they are of type less than or 
-	equal to. This is to ensure that all variables are non-negative.
+	equal to. This is to ensure that there are no negative variables.
 \end{itemize}
 
 \subsection{Calculation} \label{sec_Calculation}
@@ -678,7 +703,12 @@ mathematical terms.
 
 \subsection{Output} \label{sec_Output}
 
-All variabilities have the same output.    
+All variabilities have the same output. For example, the following inputs:\\
+$max\;Z = 3x_1 + 4x_2$\\ \hspace{10mm}
+\indent $s.\;t.\;\;x_1 + x_2\;\leq\;4$\\
+\indent \indent $2x_1 + x_2\;\leq\;5$\\
+\indent \indent $x_1, x_2\;\geq\;0$\\
+yield the output: $Z = 16$, which is the optimal solution.
 
 \section{Requirements} \label{Sec_Requirements}
 
@@ -696,7 +726,7 @@ qualities that the software is expected to exhibit.
 	
 	\item[R\refstepcounter{reqnum}\thereqnum \label{R_HandleInputErrors}:] The 
 	\famname{} tool shall verify that all inputs are valid and satisfy 
-	\aref{A_nonnegative} and \aref{A_inequalities}.
+	\aref{A_objFunSpace} and \aref{A_inequalities}.
 	
 	\item[R\refstepcounter{reqnum}\thereqnum \label{R_DisplayErrorMsg}:] If 
 	there are invalid inputs, the \famname{} tool shall display a corresponding 
@@ -774,7 +804,7 @@ assumptions and the calculation.
 		\hline        
 		& \ddref{minToMax} & \ddref{simplexTableau} & \ddref{slackVar} & 
 		\tref{T_LPSF} & \tref{T_SLPCF} & \tref{T_pivoting} & \iref{maxLP} & 
-		\iref{minLP} & \aref{A_nonnegative} & \aref{A_inequalities} & 
+		\iref{minLP} & \aref{A_objFunSpace} & \aref{A_inequalities} & 
 		\calcref{calculation} \\
 		\hline
 		\ddref{minToMax} 	    &   &   &   &   &   &   &   & X &   &   &  \\
@@ -793,7 +823,7 @@ assumptions and the calculation.
 		\hline
 		\iref{minLP}   			&   &   &   &   &   &   &   &   &   &   & X\\ 
 		\hline
-		\aref{A_nonnegative}	&   &   &   &   &   &   & X &   &   &   &  \\
+		\aref{A_objFunSpace}	&   &   &   &   &   &   &   &   &   &   &  \\
 		\hline 
 		\aref{A_inequalities} 	&   &   &   &   &   &   & X &   &   &   &  \\
 		\hline
