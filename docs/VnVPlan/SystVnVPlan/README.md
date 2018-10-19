@@ -1,5 +1,3 @@
-# Test Plan
+# System Verification & Validation Plan
 
-The folders and files for this folder are as follows:
-
-Describe ...
+This folder contains the project's system verification and validation plan in .pdf and .tex formats.
