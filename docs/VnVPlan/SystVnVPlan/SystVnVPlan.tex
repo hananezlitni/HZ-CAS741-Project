@@ -1,0 +1,431 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=magenta,
+    linkcolor=black,
+    urlcolor=cyan
+}
+\usepackage[round]{natbib}
+
+
+
+\input{../../Comments}
+
+\newcommand{\famname}{LoSMS} % PUT YOUR PROGRAM NAME %HERE
+
+\begin{document}
+
+\title{A Library of Simplex Method Solvers: System Verification and Validation 
+Plan} 
+\author{Hanane Zlitni}
+\date{October 22, 2018}
+	
+\maketitle
+
+\pagenumbering{roman}
+
+\section{Revision History}
+
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\midrule
+October 18, 2018 & 1.0 & Presentation Draft\\
+\bottomrule
+\end{tabularx}
+
+~\newpage
+
+\section{Symbols, Abbreviations and Acronyms}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  T & Test\\
+  V\&V & Verification and Validation\\
+  \famname{} & A Library of Simplex Method Solvers\\
+  CA & Commonality Analysis\\
+  \bottomrule
+\end{tabular}\\
+
+\wss{symbols, abbreviations or acronyms -- you can simply reference the SRS
+  tables, if appropriate}
+
+\newpage
+
+\tableofcontents
+
+\listoftables
+
+\listoffigures
+
+\newpage
+
+\pagenumbering{arabic}
+
+This document describes the system verification and validation plan (V\&V) for 
+the \famname{} (Library of Simplex Method Solvers) tool. It is based on the 
+tool's commonality analysis (CA) that can be found, along with the full 
+documentation of \famname{}, in the following link:  
+\url{https://github.com/hananezlitni/HZ-CAS741-Project}.
+
+The V\&V plan starts by providing general information about the tool and this 
+document in Section \ref{GeneralInfo}. Then, Section \ref{Plan} provides 
+additional details about the plan, which includes information about the V\&V 
+team, the SRS, design and implementation verification plans and the software 
+validation plan. This is followed by the system test description in Section 
+\ref{SystemTestDescription}, which consists of tests for the tool's functional 
+and nonfunctional requirements and traceability between test cases and 
+requirements. Finally, the document is concluded by Section 
+\ref{StaticVerTechniques} which describes the techniques for static 
+verification.
+
+\section{General Information} \label{GeneralInfo}
+
+\subsection{Summary}
+
+The software under test, \famname{}, is a general-purpose program family that 
+facilitates obtaining the optimal solution of a linear program, using the 
+simplex method, given the objective function, the objective function goal 
+(maximization or minimization) and the linear constraints. Since the simplex 
+algorithm is widely used in various fields, \famname{} is intended to be used 
+by people from different backgrounds to help them optimize parameters of their 
+choice. \hz{get back to this}
+
+\subsection{Objectives}
+
+\wss{State what is intended to be accomplished.  The objective will be around
+  the qualities that are most important for your project.  You might have
+  something like: ``build confidence in the software correctness,''
+  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
+  just those that are most important.}
+
+\subsection{References}
+
+\begin{itemize}
+	\item CA
+	\item "Special situations in Simplex method" paper
+\end{itemize}
+
+\section{Plan} \label{Plan}
+	
+\subsection{Verification and Validation Team}
+
+The verification and validation team consists of one member: Hanane Zlitni.
+
+\subsection{SRS Verification Plan}
+
+The CA for the \famname{} tool will be verified by getting feedback from Dr. 
+Spencer Smith and my CAS 741 classmates.
+
+\subsection{Design Verification Plan}
+
+\famname{}'s design documents will be verified by getting feedback from 
+Dr. Spencer Smith and my CAS 741 classmates.
+
+\subsection{Implementation Verification Plan}
+
+The implementation of the \famname{} tool will be verified statically by 
+performing code review with Dr. Spencer Smith and my CAS 741 classmates and 
+dynamically by executing the test cases detailed in this plan and the unit V\&V 
+plan using testing frameworks (e.g. JUnit/PyUnit).
+ 
+\subsection{Software Validation Plan}
+
+Not applicable for \famname{}.
+
+\section{System Test Description} \label{SystemTestDescription}
+
+System testing for the \famname{} tool ensures that the correct inputs produce 
+the correct outputs. The test cases in this section are derived from the 
+instance models and the requirements detailed in the tool's CA.
+	
+\subsection{Tests for Functional Requirements}
+
+\subsubsection{Tests for Solving Maximization Linear Programs}
+
+\begin{enumerate}
+	\item{\textbf{T1: Unique Optimal Solution}}
+	
+	Control: Automatic 
+	
+	Initial State: -
+	
+	Input: $max\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$\\
+	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\;+\;x_3\; \leq \;10$\\
+	$\hspace*{2cm} 4x_1\;-\;3x_2\;+\;x_3\; \leq \;3$\\
+	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
+	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
+	
+	Output: $Z = 3$, occurring when $x_1=0,\;x_2=0,\;x_3=3$
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference IM1 in CA}
+
+	\item{\textbf{T2: Multiple Optimal Solutions}}
+	
+	Control: Automatic 
+	
+	Initial State: -
+	
+	Input: $max\;Z\;=\;3x_1\;+\;2x_2$\\
+	$s.\;t.$$\hspace*{1.3cm} 3x_1\;+\;2x_2\; \leq \;180$\\
+	$\hspace*{2cm} x_1\; \leq \;40$\\
+	$\hspace*{2cm} x_2\; \leq \;60$\\
+	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
+	
+	Output: $Z = 180$, occurring when $x_1=40,\;x_2=30$ \& $x_1=20,\;x_2=60$
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference IM1 in CA}
+
+	\item{\textbf{T3: No Optimal Solution}}
+	
+	Control: Automatic 
+	
+	Initial State: -
+	
+	Input: $max\;Z\;=\;2x_1\;+\;x_2$\\
+	$s.\;t.$$\hspace*{1.3cm} x_1\;-\;x_2\; \leq \;10$\\
+	$\hspace*{2cm} 2x_1\;-\;x_2\; \leq \;40$\\
+	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
+	
+	Output: "This linear program does not have an optimal solution"
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference IM1 in CA}
+\end{enumerate}
+
+\subsubsection{Tests for Solving Minimization Linear Programs}
+
+\begin{enumerate}
+	\item{\textbf{T4: Unique Optimal Solution}}
+	
+	Control: Automatic 
+	
+	Initial State: -
+	
+	Input:
+	
+	Output: 
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: 
+	
+	\item{\textbf{T5: Multiple Optimal Solutions}}
+	
+	Control: Automatic 
+	
+	Initial State: -
+	
+	Input: 
+	
+	How test will be performed: 
+	
+	Test Case Derivation: 
+	
+	\item{\textbf{T6: No Optimal Solution}}
+	
+	Control: Automatic 
+	
+	Initial State: -
+	
+	Input:
+	
+	Output: 
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: 
+\end{enumerate}
+
+\subsubsection{Tests for Faulty Inputs}
+
+\begin{enumerate}
+	\item{\textbf{T7: No Objective Function}}
+	
+	Control: Automatic
+	
+	Initial State: -
+	
+	Input: $min $\\
+	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\;+\;x_3\; \leq \;10$\\
+	$\hspace*{2cm} 4x_1\;-\;3x_2\;+\;x_3\; \leq \;3$\\
+	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
+	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
+	
+	Output: "Error: No objective function"
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference IM1 \& IM2 in CA}
+	
+	\item{\textbf{T8: No Linear Constraints}}
+	
+	Control: Automatic
+	
+	Initial State: -
+	
+	Input: $max\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$
+	
+	Output: "Error: No linear constraints"
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference IM1 \& IM2 in CA}
+	
+	\item{\textbf{T9: No Objective Function Goal}}
+	
+	Control: Automatic
+	
+	Initial State: -
+	
+	Input: $\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$\\
+	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\;+\;x_3\; \leq \;10$\\
+	$\hspace*{2cm} 4x_1\;-\;3x_2\;+\;x_3\; \leq \;3$\\
+	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
+	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
+	
+	Output: "Error: No objective function goal"
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference IM1 \& IM2 in CA}
+	
+	\item{\textbf{T10: No Non-negativity Constraints/Negative Decision 
+	Variables}}
+	
+	Control: Automatic
+	
+	Initial State: -
+	
+	Input: $max\;Z\;=\;2x_1\;-\;3x_2$\\
+	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\; \leq \;5$\\
+	$\hspace*{2cm} 4x_1\;-\;3x_2\; \leq \;4$
+	
+	Output: "Error: The decision variables must be positive"
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference T1 in CA}
+	
+	\item{\textbf{T11: Greater Than or Equal to Inequalities}}
+	
+	Control: Automatic
+	
+	Initial State: -
+	
+	Input: $max\;Z\;=\;2x_1\;-\;3x_2$\\
+	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\; \leq \;5$\\
+	$\hspace*{2cm} 4x_1\;-\;3x_2\; \geq \;4$\\
+	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
+	
+	Output: "Error: The inequalities of the main constraints must be of type 
+	less than or equal to"
+	
+	How test will be performed: Unit testing using JUnit/PyUnit
+	
+	Test Case Derivation: \hz{reference A2 in CA}
+\end{enumerate}
+
+\subsection{Tests for Nonfunctional Requirements}
+
+\subsubsection{Usability}
+
+\begin{enumerate}
+	\item{\textbf{T12: Test for the Usability of \famname{}}}
+	
+	Type: Usability Testing
+						
+	Initial State: -
+						
+	Input/Condition: -
+						
+	Output/Result: -
+						
+	How test will be performed: Asking participants to try the tool then answer 
+	the usability survey questions (see Appendix \ref{UsabilityTesting})
+\end{enumerate}
+
+\subsubsection{Portability}
+
+\begin{enumerate}
+	\item{\textbf{T13: Test for the Portability of \famname{}}}
+	
+	Type: Static \hz{??}
+	
+	Initial State: -
+	
+	Input/Condition: -
+	
+	Output/Result: -
+	
+	How test will be performed: Running \famname{} on different operating 
+	systems
+\end{enumerate}
+
+\subsubsection{Robustness}
+
+\begin{enumerate}
+	\item{\textbf{T14: Test for the Robustness of \famname{}}}
+	
+	Type: Dynamic \hz{??}
+	
+	Initial State: -
+	
+	Input/Condition: -
+	
+	Output/Result: -
+	
+	How test will be performed: \hz{mutation testing?}
+\end{enumerate}
+
+\subsection{Traceability Between Test Cases and Requirements}
+
+\wss{Provide a table that shows which test cases are supporting which
+  requirements.}
+
+\section{Static Verification Techniques} \label{StaticVerTechniques}
+
+\wss{In this section give the details of any plans for static verification of
+  the implementation.  Potential techniques include code walkthroughs, code
+  inspection, static analyzers, etc.}
+
+\newpage
+				
+\bibliographystyle{plainnat}
+
+\bibliography{SRS}
+
+\newpage
+
+\section{Appendix}
+
+This section provides additional content related to this system V\&V plan.
+
+\subsection{Symbolic Parameters}
+
+There are no symbolic parameters used in this document.
+
+\subsection{Usability Survey Questions} \label{UsabilityTesting}
+
+\begin{enumerate}
+	\item Overall, how easy to use do you find \famname{}? \hz{range 1-5}
+	\item Overall, how confident are you that you completed the task 
+	successfully? \hz{range 1-5}
+	\item Rate your satisfaction with \famname{} out of 10
+	
+	\hz{add more questions}
+\end {enumerate}
+
+\end{document}

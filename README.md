@@ -6,5 +6,5 @@ This project is an implementation of a library that solves linear programs using
 
 The folders and files for this project are as follows:
 
-<b>1. docs:</b> Problem Statement, SRS <br />
+<b>1. docs:</b> Problem Statement, SRS, VnV Plan <br />
 <b>2. refs:</b> References and supporting materials <br />
