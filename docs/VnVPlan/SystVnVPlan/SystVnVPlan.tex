@@ -34,7 +34,7 @@ Plan}
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-October 18, 2018 & 1.0 & Presentation Draft\\
+October 22, 2018 & 1.0 & First Draft\\
 \bottomrule
 \end{tabularx}
 
@@ -49,13 +49,14 @@ October 18, 2018 & 1.0 & Presentation Draft\\
   \midrule 
   T & Test\\
   V\&V & Verification and Validation\\
-  \famname{} & A Library of Simplex Method Solvers\\
+  \famname{} & Library of Simplex Method Solvers\\
   CA & Commonality Analysis\\
+  SRS & Software Requirements Specification\\
+  A & Assumption\\
+  IM & Instance Model\\
+  $s.\;t.$ & Subject to\\
   \bottomrule
 \end{tabular}\\
-
-\wss{symbols, abbreviations or acronyms -- you can simply reference the SRS
-  tables, if appropriate}
 
 \newpage
 
@@ -96,22 +97,17 @@ simplex method, given the objective function, the objective function goal
 (maximization or minimization) and the linear constraints. Since the simplex 
 algorithm is widely used in various fields, \famname{} is intended to be used 
 by people from different backgrounds to help them optimize parameters of their 
-choice. \hz{get back to this}
+choice.
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+The objective of this verification and validation plan is to build confidence 
+in the correctness of the \famname{} tool (i.e. it produces the correct output 
+for the corresponding inputs), while providing satisfactory usability.
 
 \subsection{References}
 
-\begin{itemize}
-	\item CA
-	\item "Special situations in Simplex method" paper
-\end{itemize}
+Different sections in this document refer to the tool's CA (\cite{losms-ca}).
 
 \section{Plan} \label{Plan}
 	
@@ -167,7 +163,7 @@ instance models and the requirements detailed in the tool's CA.
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference IM1 in CA}
+	Test Case Derivation: IM1 in \cite{losms-ca}
 
 	\item{\textbf{T2: Multiple Optimal Solutions}}
 	
@@ -185,7 +181,7 @@ instance models and the requirements detailed in the tool's CA.
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference IM1 in CA}
+	Test Case Derivation: IM1 in \cite{losms-ca}
 
 	\item{\textbf{T3: No Optimal Solution}}
 	
@@ -198,11 +194,13 @@ instance models and the requirements detailed in the tool's CA.
 	$\hspace*{2cm} 2x_1\;-\;x_2\; \leq \;40$\\
 	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	Output: "This linear program does not have an optimal solution"
+	Output: ``This linear program does not have an optimal solution'', or a 
+	corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference IM1 in CA}
+	Test Case Derivation: IM1 in \cite{losms-ca} and 
+	\cite{simplex-special-situations}
 \end{enumerate}
 
 \subsubsection{Tests for Solving Minimization Linear Programs}
@@ -214,45 +212,43 @@ instance models and the requirements detailed in the tool's CA.
 	
 	Initial State: -
 	
-	Input:
+	Input: $min\;Z\;=\;-2x_1\;+\;3x_2$\\
+	$s.\;t.$$\hspace*{1.3cm} 3x_1\;+\;4x_2\; \leq \;24$\\
+	$\hspace*{2cm} 7x_1\;+\;4x_2\; \leq \;16$\\
+	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	Output: 
+	Output: $Z = -4.57$, occurring when $x_1=2.29,\;x_2=0$
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: 
+	Test Case Derivation: IM2 in \cite{losms-ca}
 	
-	\item{\textbf{T5: Multiple Optimal Solutions}}
+	\item{\textbf{T5: No Optimal Solution}}
 	
 	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: 
+	Input: $min\;Z\;=\;3x_1\;+\;14x_2$\\
+	$s.\;t.$$\hspace*{1.3cm} -1x_1\;-\;5x_2\; \leq \;-6$\\
+	$\hspace*{2cm} -x_1\;-\;4x_2\; \leq \;-5$\\
+	$\hspace*{2cm} -x_1\;-\;3x_2\; \leq \;-4$\\
+	$\hspace*{2cm} -x_1\;-\;2x_2\; \leq \;-5$\\
+	$\hspace*{2cm} -x_1\;-\;x_2\; \leq \;-6$\\
+	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	How test will be performed: 
-	
-	Test Case Derivation: 
-	
-	\item{\textbf{T6: No Optimal Solution}}
-	
-	Control: Automatic 
-	
-	Initial State: -
-	
-	Input:
-	
-	Output: 
+	Output: ``This linear program does not have an optimal solution'', or a 
+	corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: 
+	Test Case Derivation: IM2 in \cite{losms-ca}
 \end{enumerate}
 
 \subsubsection{Tests for Faulty Inputs}
 
 \begin{enumerate}
-	\item{\textbf{T7: No Objective Function}}
+	\item{\textbf{T6: No Objective Function}}
 	
 	Control: Automatic
 	
@@ -264,13 +260,13 @@ instance models and the requirements detailed in the tool's CA.
 	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
 	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
 	
-	Output: "Error: No objective function"
+	Output: ``Error: No objective function'', or a corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference IM1 \& IM2 in CA}
+	Test Case Derivation: IM1 \& IM2 in \cite{losms-ca}
 	
-	\item{\textbf{T8: No Linear Constraints}}
+	\item{\textbf{T7: No Linear Constraints}}
 	
 	Control: Automatic
 	
@@ -278,13 +274,13 @@ instance models and the requirements detailed in the tool's CA.
 	
 	Input: $max\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$
 	
-	Output: "Error: No linear constraints"
+	Output: ``Error: No linear constraints'', or a corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference IM1 \& IM2 in CA}
+	Test Case Derivation: IM1 \& IM2 in \cite{losms-ca}
 	
-	\item{\textbf{T9: No Objective Function Goal}}
+	\item{\textbf{T8: No Objective Function Goal}}
 	
 	Control: Automatic
 	
@@ -296,13 +292,13 @@ instance models and the requirements detailed in the tool's CA.
 	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
 	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
 	
-	Output: "Error: No objective function goal"
+	Output: ``Error: No objective function goal'', or a corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference IM1 \& IM2 in CA}
+	Test Case Derivation: IM1 \& IM2 in \cite{losms-ca}
 	
-	\item{\textbf{T10: No Non-negativity Constraints/Negative Decision 
+	\item{\textbf{T9: No Non-negativity Constraints/Negative Decision 
 	Variables}}
 	
 	Control: Automatic
@@ -313,13 +309,14 @@ instance models and the requirements detailed in the tool's CA.
 	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\; \leq \;5$\\
 	$\hspace*{2cm} 4x_1\;-\;3x_2\; \leq \;4$
 	
-	Output: "Error: The decision variables must be positive"
+	Output: ``Error: The decision variables must be positive'', or a 
+	corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference T1 in CA}
+	Test Case Derivation: Theoretical Model 1 in \cite{losms-ca}
 	
-	\item{\textbf{T11: Greater Than or Equal to Inequalities}}
+	\item{\textbf{T10: Greater Than or Equal to Inequalities}}
 	
 	Control: Automatic
 	
@@ -330,12 +327,12 @@ instance models and the requirements detailed in the tool's CA.
 	$\hspace*{2cm} 4x_1\;-\;3x_2\; \geq \;4$\\
 	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	Output: "Error: The inequalities of the main constraints must be of type 
-	less than or equal to"
+	Output: ``Error: The inequalities of the main constraints must be of type 
+	less than or equal to'', or a corresponding exception
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: \hz{reference A2 in CA}
+	Test Case Derivation: A2 in \cite{losms-ca}
 \end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
@@ -343,7 +340,7 @@ instance models and the requirements detailed in the tool's CA.
 \subsubsection{Usability}
 
 \begin{enumerate}
-	\item{\textbf{T12: Test for the Usability of \famname{}}}
+	\item{\textbf{T11: Test for the Usability of \famname{}}}
 	
 	Type: Usability Testing
 						
@@ -354,15 +351,17 @@ instance models and the requirements detailed in the tool's CA.
 	Output/Result: -
 						
 	How test will be performed: Asking participants to try the tool then answer 
-	the usability survey questions (see Appendix \ref{UsabilityTesting})
+	the usability survey questions (see Appendix \ref{UsabilityTesting}). The 
+	goal is to ensure that the library provided the services the users 
+	requested and that they are satisfied with the results obtained.
 \end{enumerate}
 
 \subsubsection{Portability}
 
 \begin{enumerate}
-	\item{\textbf{T13: Test for the Portability of \famname{}}}
+	\item{\textbf{T12: Test for the Portability of \famname{}}}
 	
-	Type: Static \hz{??}
+	Type: Static
 	
 	Initial State: -
 	
@@ -370,16 +369,16 @@ instance models and the requirements detailed in the tool's CA.
 	
 	Output/Result: -
 	
-	How test will be performed: Running \famname{} on different operating 
-	systems
+	How test will be performed: Running \famname{} on Mac, Windows and Linux 
+	operating systems
 \end{enumerate}
 
-\subsubsection{Robustness}
+\subsubsection{Accuracy}
 
 \begin{enumerate}
-	\item{\textbf{T14: Test for the Robustness of \famname{}}}
-	
-	Type: Dynamic \hz{??}
+	\item{\textbf{T13: Test for the Accuracy of the Outputs}}
+
+	Type: Dynamic
 	
 	Initial State: -
 	
@@ -387,25 +386,79 @@ instance models and the requirements detailed in the tool's CA.
 	
 	Output/Result: -
 	
-	How test will be performed: \hz{mutation testing?}
+	How test will be performed: I plan to report the relative error of the 
+	expected output for each test case detailed in this document
+\end{enumerate}
+
+\subsubsection{Correctness \& Performance}
+
+\begin{enumerate}
+	\item{\textbf{T14: Test for the Correctness \& Performance of \famname{}}}
+	
+	Type: Parallel Testing
+	
+	Initial State: -
+	
+	Input/Condition: -
+	
+	Output/Result: -
+	
+	How test will be performed: I plan to make a comparison between \famname{} 
+	and MatLab to evaluate the correctness and performance of \famname{}
+\end{enumerate}
+
+\subsubsection{Stability}
+
+\begin{enumerate}
+	\item{\textbf{T15: Test for the Stability of \famname{} Under Heavy Load}}
+	
+	Type: Stress Testing
+	
+	Initial State: -
+	
+	Input/Condition: -
+	
+	Output/Result: -
+	
+	How test will be performed: Use the library to solve problems with great 
+	number of inputs and observe how it would behave
 \end{enumerate}
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+The following table describes the mapping between the test cases and 
+requirements.
+
+\begin{table} [h!]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline	
+		\textbf{Test Case Number} & \textbf{Requirements}\\
+		\hline 
+		T1& R1, R4, R5, R6, R7\\ \hline
+		T2& R1, R4, R5, R6, R7\\ \hline
+		T3& R1, R4, R5, R6, R8\\ \hline
+		T4& R1, R4, R5, R6, R7\\ \hline
+		T5& R1, R4, R5, R6, R8\\ \hline
+		T6& R1, R2, R3\\ \hline
+		T7& R1, R2, R3\\ \hline
+		T8& R1, R2, R3\\ \hline
+		T9& R1, R2, R3\\ \hline
+		T10& R1, R2, R3\\ \hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Requirements}
+	\label{Table:Traceability} 
+\end{table}
 
 \section{Static Verification Techniques} \label{StaticVerTechniques}
 
-\wss{In this section give the details of any plans for static verification of
-  the implementation.  Potential techniques include code walkthroughs, code
-  inspection, static analyzers, etc.}
+Static verification of the \famname{} library implementation will performed 
+using code review with Dr. Spencer Smith and my CAS 741 classmates.
 
 \newpage
 				
-\bibliographystyle{plainnat}
-
-\bibliography{SRS}
+\bibliographystyle {plainnat}
+\bibliography {../../../refs/References}
 
 \newpage
 
@@ -420,12 +473,28 @@ There are no symbolic parameters used in this document.
 \subsection{Usability Survey Questions} \label{UsabilityTesting}
 
 \begin{enumerate}
-	\item Overall, how easy to use do you find \famname{}? \hz{range 1-5}
-	\item Overall, how confident are you that you completed the task 
-	successfully? \hz{range 1-5}
-	\item Rate your satisfaction with \famname{} out of 10
+	\item Did \famname{} successfully provide all the services you requested?
 	
-	\hz{add more questions}
+	(	Yes	/	No	)
+	\item How confident are you that \famname{} provided you with the correct 
+	results?
+	
+	(	1	/	2	/	3	/	4	/	5	) ; \textit{(1) being not confident 
+	at all and (5) being very confident}
+
+	\item How satisfied are you with the library's response time?  
+	
+	(	1	/	2	/	3	/	4	/	5	) ; \textit{(1) being not satisfied 
+	at all and (5) being very satisfied}
+
+	\item How likely are you to recommend \famname{} to a friend?
+	
+	(	1	/	2	/	3	/	4	/	5	) ; \textit{(1) being very unlikely 
+	and (5) being very likely}
+
+	\item Rate your overall satisfaction with \famname{} out of 10
+	
+	\item Please provide us with general comments, if any
 \end {enumerate}
 
 \end{document}
