@@ -88,7 +88,8 @@
 
 \begin{document}
 
-\title{Commonality Analysis of a Library of Simplex Method Solvers} 
+\title{Commonality Analysis of a Library of Simplex Method Solvers \wss{Put the
+    name of your library in the title}} 
 \author{Hanane Zlitni}
 \date{October 4, 2018}
 
@@ -245,11 +246,15 @@ constraints.
 	\end{center}
 \end{figure}
 
+\wss{Nice to see the drive program is interacting with your library, and not a
+  user.}
+
 Figure~\ref{Figure_SystemContext} describes the system context of \famname{}. 
 The user inputs the correct data and \famname{} displays the output, if any.
 
 \begin{itemize}
-	\item User Responsibilities:
+	\item User Responsibilities: \wss{Rather than user responsibilities, you
+            should probably discuss the calling programs responsibilities}
 	\begin{itemize}
 		\item Input the objective function, linear constraints and the 
 		objective function goal.
@@ -288,6 +293,9 @@ models.
 of linear programs given the objective function and linear constraints. The 
 tool can be beneficial for users coming from various fields, including physics 
 and chemistry.
+
+\wss{The background section would be a great place to show the ``classic'' 2D
+  picture of the simplex method.}
 
 \subsection{Terminology and  Definitions}
 
@@ -434,6 +442,9 @@ function goal, the goal statement of \famname{} is:
 	solution(s) satisfying all linear constraints and sign restrictions.
 \end{itemize}
 
+\wss{Rather than display the optimal solution, say ``output'' the optimal
+  solution.  This is a more abstract way to say it.}
+
 \subsection{Theoretical Models} \label{sec_theoretical}
 
 This section focuses on the general equations and laws that \famname{} is based
@@ -486,6 +497,10 @@ on.
 	  	\hline
 	\end{tabular}
 \end{minipage}\\
+
+\wss{The names of functions, like max, should not be in italic font.  You can
+  use the following \LaTeX code to change fonts inside an equation: $\text{max }
+  Z = ...$} \wss{Isn't $Z$ usually in lower case in this formula?}
 
 ~\newline
 
