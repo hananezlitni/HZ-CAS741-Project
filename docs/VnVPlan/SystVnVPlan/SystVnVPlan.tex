@@ -70,8 +70,8 @@ October 22, 2018 & 1.0 & First Draft\\
 
 \pagenumbering{arabic}
 
-This document describes the system verification and validation plan (V\&V) for 
-the \famname{} (Library of Simplex Method Solvers) tool. It is based on the 
+This document describes the system verification and validation (V\&V) plan for 
+the Library of Simplex Method Solvers (\famname{}) tool. It is based on the 
 tool's commonality analysis (CA) that can be found, along with the full 
 documentation of \famname{}, in the following link:  
 \url{https://github.com/hananezlitni/HZ-CAS741-Project}.
@@ -83,9 +83,8 @@ team, the SRS, design and implementation verification plans and the software
 validation plan. This is followed by the system test description in Section 
 \ref{SystemTestDescription}, which consists of tests for the tool's functional 
 and nonfunctional requirements and traceability between test cases and 
-requirements. Finally, the document is concluded by Section 
-\ref{StaticVerTechniques} which describes the techniques for static 
-verification.
+requirements. The document is concluded by Section \ref{StaticVerTechniques} 
+which describes the techniques for static verification.
 
 \section{General Information} \label{GeneralInfo}
 
@@ -230,7 +229,7 @@ instance models and the requirements detailed in the tool's CA.
 	Initial State: -
 	
 	Input: $min\;Z\;=\;3x_1\;+\;14x_2$\\
-	$s.\;t.$$\hspace*{1.3cm} -1x_1\;-\;5x_2\; \leq \;-6$\\
+	$s.\;t.$$\hspace*{1.3cm} -x_1\;-\;5x_2\; \leq \;-6$\\
 	$\hspace*{2cm} -x_1\;-\;4x_2\; \leq \;-5$\\
 	$\hspace*{2cm} -x_1\;-\;3x_2\; \leq \;-4$\\
 	$\hspace*{2cm} -x_1\;-\;2x_2\; \leq \;-5$\\
