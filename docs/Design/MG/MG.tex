@@ -140,8 +140,7 @@ external interface.
   initial input data.
   
 \item[\refstepcounter{acnum} \actheacnum \label{acInputAssumption}:] The 
-assumptions related to the input data. \hz{referencing the assumption that the 
-inequalities are "less than or equal to"}
+assumptions related to the input data.
 
 \item[\refstepcounter{acnum} \actheacnum \label{acInputDataStructure}:] The 
 data structure used to store the input data.
@@ -165,13 +164,9 @@ decisions will be changed.
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
   (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-  
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucInput}:] There will always be
-  a source of input data external to the software. \hz{does this mean the 
-  client that will provide the inputs?}
 
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucObjective}:] The objective of 
-\famname{} will always be to find and display the optimal solution(s) of linear 
+\famname{} will always be to find and output the optimal solution(s) of linear 
 programs that satisfy all constraints and sign restrictions.
 \end{description}
 
@@ -184,19 +179,25 @@ actually be implemented.
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
-\item [\refstepcounter{mnum} \mthemnum \label{mIF}:] Input Module
-\item [\refstepcounter{mnum} \mthemnum \label{mIC}:] Input Conversion Module
-\item [\refstepcounter{mnum} \mthemnum \label{mOF}:] Output Module
+\item [\refstepcounter{mnum} \mthemnum \label{mBH}:] Behaviour-Hiding Module
 \item [\refstepcounter{mnum} \mthemnum \label{mEI}:] External Interface Module
-\item [\refstepcounter{mnum} \mthemnum \label{mSMax}:] Simplex Method Solver 
-for Maximization Problems
-\item [\refstepcounter{mnum} \mthemnum \label{mSMin}:] Simplex Method Solver 
-for Minimization Problems
+\item [\refstepcounter{mnum} \mthemnum \label{mInput}:] Input Module
+\item [\refstepcounter{mnum} \mthemnum \label{mIC}:] Input Conversion Module
+\item [\refstepcounter{mnum} \mthemnum \label{mDataStructure}:] Data Structure 
+Module
+\item [\refstepcounter{mnum} \mthemnum \label{mSimplex}:] Simplex Method Solver
+\item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Module
 \end{description}
 
 Note that \mref{mHH} is a commonly used module and is already implemented by 
-the operating system. Therefore, it will not be reimplemented.
-
+the operating system. Therefore, it will not be reimplemented. Furthermore, for 
+the current scope of the project where minimization linear programs are solved 
+by converting them to maximization problems, it makes more sense to have one 
+simplex method solver module that provides services for solving both types of 
+problems. In case of further expansion of the project and the usage of other 
+variations of the algorithm to solve minimization problems, it would then make 
+more sense to have two separate simplex method modules: one for maximization 
+problems and one for minimization problems.
 
 \begin{table}[h!]
 \centering
@@ -208,16 +209,16 @@ the operating system. Therefore, it will not be reimplemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Behaviour-Hiding Module}
-& Input\\ 
-& Output\\
-& External Interface\\
+{Behaviour-Hiding Module} & ~ \\
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module}
+& External Interface\\
+& Input\\ 
 & Input Conversion\\
-& Simplex Method Solver for Maximization Problems\\
-& Simplex Method Solver for Minimization Problems\\
+& Data Structure\\
+& Simplex Method Solver\\
+& Output\\
 \bottomrule
 
 \end{tabular}
@@ -260,7 +261,7 @@ selected.
 \item[Implemented By:] OS
 \end{description}
 
-\subsection{Behaviour-Hiding Module}
+\subsection{Behaviour-Hiding Module (\mref{mBH})}
 
 \begin{description}
 \item[Secrets:]The contents of the required behaviours.
@@ -270,33 +271,6 @@ selected.
   hardware-hiding module and the software decision module. The programs in this
   module will need to change if there are changes in the SRS.
 \item[Implemented By:] --
-\end{description}
-
-\subsubsection{Input Module (\mref{mIF})}
-
-\begin{description}
-\item[Secrets:]The format and structure of the input data.
-\item[Services:]Gets the inputs from the client, verifies that they are valid, 
-throws an error if the inputs violate any constraints.
-\item[Implemented By:] \famname{}
-\end{description}
-	
-\subsubsection{Output Module (\mref{mOF})}
-
-\begin{description}
-	\item[Secrets:]The format and structure of the output data.
-	\item[Services:]Outputs the optimal solution of the linear program and the 
-	point where it occurs which are obtained from the simplex method solvers.
-	\item[Implemented By:] \famname{}
-\end{description}
-
-\subsubsection{External Interface Module (\mref{mEI})}
-
-\begin{description}
-	\item[Secrets:]The library's interface.
-	\item[Services:]Provides the external interface which is the communication 
-	link between the client programs and the other \famname{} modules.
-	\item[Implemented By:] \famname{}
 \end{description}
 
 \subsection{Software Decision Module}
@@ -312,33 +286,62 @@ throws an error if the inputs violate any constraints.
 \item[Implemented By:] --
 \end{description}
 
+\subsubsection{External Interface Module (\mref{mEI})}
+
+\begin{description}
+	\item[Secrets:]The library's inner modules.
+	\item[Services:]Provides the external interface which is the communication 
+	link between the client programs and the inner \famname{} modules.
+	\item[Implemented By:] \famname{}
+\end{description}
+
+\subsubsection{Input Module (\mref{mInput})}
+
+\begin{description}
+	\item[Secrets:]The format and structure of the input data.
+	\item[Services:]Gets the inputs from the client, verifies that they are 
+	valid, 
+	throws an error if the inputs violate any constraints.
+	\item[Implemented By:] \famname{}
+\end{description}
+
 \subsubsection{Input Conversion Module (\mref{mIC})}
 
 \begin{description}
 	\item[Secrets:]The way the inputs are converted to the forms needed for the 
-	simplex method solvers.
+	simplex method solver module.
 	\item[Services:]Converts the inputs to the standard and canonical forms 
-	which are needed for the simplex method solvers.
+	which are needed for the simplex method solver module.
 	\item[Implemented By:] \famname{}
 \end{description}
 
-\subsubsection{Simplex Method Solver for Maximization Problems (\mref{mSMax})}
+\subsubsection{Data Structure Module (\mref{mDataStructure})}
 
 \begin{description}
-	\item[Secrets:]The simplex algorithm implementation for solving 
-	maximization linear programming problems.
-	\item[Services:]Solves maximization linear programs using the simplex 
-	method by performing the simplex method steps.
+	\item[Secrets:]The data structure for a matrix (i.e. the simplex method 
+	tableau).
+	\item[Services:]Converts the values in the input conversion module to a 
+	matrix (2D array) and communicates with the simplex method solver for 
+	matrix operations.
 	\item[Implemented By:] \famname{}
 \end{description}
 
-\subsubsection{Simplex Method Solver for Minimization Problems (\mref{mSMin})}
+\subsubsection{Simplex Method Solver (\mref{mSimplex})}
 
 \begin{description}
 	\item[Secrets:]The simplex algorithm implementation for solving 
-	minimization linear programming problems.
-	\item[Services:]Solves minimization linear programs using the simplex 
-	method by performing the simplex method steps.
+	maximization and minimization linear programming problems.
+	\item[Services:]Solves maximization and minimization linear programs using 
+	the simplex method.
+	\item[Implemented By:] \famname{}
+\end{description}
+
+\subsubsection{Output Module (\mref{mOutput})}
+
+\begin{description}
+	\item[Secrets:]The format and structure of the output data.
+	\item[Services:]Outputs the optimal solution of the linear program and the 
+	point where it occurs which are obtained from the simplex method solvers.
 	\item[Implemented By:] \famname{}
 \end{description}
 
@@ -355,17 +358,14 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+R1 & \mref{mHH}, \mref{mEI}, \mref{mInput}\\
+R2 & \mref{mInput}\\
+R3 & \mref{mInput}\\
+R4 & \mref{mIC}\\
+R5 & \mref{mIC}\\
+R6 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
+R7 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
+R8 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -379,22 +379,21 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
+\acref{acInterface} & \mref{mEI}\\
+\acref{acInput} & \mref{mInput}, \mref{mIC}\\
+\acref{acInputAssumption} & \mref{mInput}, \mref{mIC}\\
+\acref{acInputDataStructure} & \mref{mDataStructure}\\
+\acref{acAlgorithm} & \mref{mSimplex}\\
 \acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
-\acref{acPlot} & \mref{mPlot}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
 \label{TblACT}
 \end{table}
+
+\hz{Is it okay that I didn't include M2 (BH Module) in the tables? Since there 
+aren't any BH modules in the hierarchy, I didn't know how to map it with the Rs 
+and the ACs}
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
 
@@ -411,7 +410,7 @@ because they use modules from the lower levels.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.3\textwidth]{UsesHierarchy.png}
 \caption{Use Hierarchy Among Modules}
 \label{FigUH}
 \end{figure}
