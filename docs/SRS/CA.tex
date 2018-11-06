@@ -174,6 +174,9 @@ The simplex method, a linear programming algorithm, is considered one of the
 most popular algorithms that has significant influence in the fields of science 
 and engineering (\cite{simplex-popularity}). 
 
+\wss{In your introduction it would be nice to say what linear programming
+  actually is.}
+
 The algorithm can be used in a variety of fields and its goal is to make the 
 most of the available resources to achieve the optimal solution. For example, 
 the simplex method is used in the sand casting process to optimize the sand 
@@ -272,10 +275,17 @@ The user inputs the correct data and \famname{} displays the output, if any.
 	\end{itemize}
 \end{itemize}
 
+\wss{You say optimal solution, but it is unclear whether you mean the value of
+  the optimal value of the objective function, or the optimal value and the
+  corresponding values of the decision variables.}
+
 \subsection{Potential User Characteristics} \label{SecUserCharacteristics}
 
 The end user of \famname{} should have basic knowledge of linear programming  
-which is typically given to year 3 undergraduate students.
+which is typically given to year 3 undergraduate students.  \wss{A little more
+  information would be good here.  Undergraduate students in what programs?
+  What course subject would typically cover linear programming - operations
+  research? systems?}
 
 \subsection{Potential System Constraints}
 
@@ -366,6 +376,8 @@ models. The dimension of each quantity is also given.
 	\end{tabular}
 \end{minipage}\\
 
+\wss{It is nice to see that IM2 actually does reference DD1.  Good!}
+
 ~\newline
 
 \noindent
@@ -399,7 +411,7 @@ models. The dimension of each quantity is also given.
 		\hline
 	\end{tabular}
 \end{minipage}\\
-
+\wss{I feel like there should be a symbol for the tableau and a source.}
 ~\newline
 
 \noindent
@@ -443,7 +455,8 @@ function goal, the goal statement of \famname{} is:
 \end{itemize}
 
 \wss{Rather than display the optimal solution, say ``output'' the optimal
-  solution.  This is a more abstract way to say it.}
+  solution.  This is a more abstract way to say it.} \wss{As mentioned
+  previously, you should be clear on what you mean by the optimal solution.}
 
 \subsection{Theoretical Models} \label{sec_theoretical}
 
@@ -477,7 +490,9 @@ on.
 		  \end{array}
 		  \right. 
 		  \] , where: $c, a, b \in R$ ; $k \in N$ ; $n$ = the row number ; $m$ 
-		  = the column number\\
+		  = the column number \wss{$a$ and $b$ should have the
+          subscripts.  Without the subscripts, they would not have the type
+          real, but multidimensional sequences of real.}\\
 	  	\hline
 	  	Description & 
 	      A linear program is in its standard form when it satisfies the 
@@ -501,6 +516,10 @@ on.
 \wss{The names of functions, like max, should not be in italic font.  You can
   use the following \LaTeX code to change fonts inside an equation: $\text{max }
   Z = ...$} \wss{Isn't $Z$ usually in lower case in this formula?}
+
+\wss{Do you want to consider using matrix notation for these equations?  I guess
+  it depends on how many times you need the equation.  If you are using it
+  frequently, the more succinct matrix notation would help.}
 
 ~\newline
 
@@ -544,6 +563,7 @@ on.
 		\hline
 	\end{tabular}
 \end{minipage}\\
+\wss{Isn't this where you want to mention slack variables?}
 
 ~\newline
 
@@ -586,6 +606,9 @@ on.
 	\end{tabular}
 \end{minipage}\\
 
+\wss{The information on T3 doesn't actually tell me what pivoting is.  You have
+  just defined elementary row operations, not why you would do them.}
+
 \section{Variabilities} \label{Sec_Variabilities} 
 
 This section describes the variabilities in the \famname{} tool and details the 
@@ -620,7 +643,9 @@ mathematical terms.
 			\newline$x_1, ..., x_k\;{\geq}\;0$
 		\end{enumerate} , where: $c, a, b \in R$ ; $k, n, m \in N$\\
 		\hline
-		Output& The optimal solution $Z$\\
+		Output& The optimal solution $Z$ \wss{I'm surprised you just
+                        want $Z$.  Don't you also want the $x_i$ values that
+                        give you $Z$?}\\
 		\hline
 		Description& The purpose of this instance model is to provide details 
 		about solving linear programs that intend to maximize a parameter. The 
@@ -693,6 +718,15 @@ mathematical terms.
 	\end{tabular}
 \end{minipage}\\
 
+\wss{You have missed the notion of binding time.  You could have family members
+  where the number of equations are fixed at design time.  This information
+  could be hard-coded into a family member.  I don't think you need to add this
+  now, but you could clarify that the size variabilities are all left to
+  run-time.}
+
+\wss{You could have mentioned the ``covering'' variation (see the Wikipedia page
+  for Linear Programming.}
+
 \subsubsection*{Derivation of the Simplex Method}{
 	The origin of the simplex method is detailed in \cite{simplex-origin}. 
 }
@@ -716,6 +750,9 @@ mathematical terms.
 	problems.
 \end{itemize}
 
+\wss{It would be better if you phrased these as variabilities.  You could also
+  have mentioned the variabilities I mentioned above.}
+
 \subsection{Output} \label{sec_Output}
 
 All variabilities have the same output. For example, the following inputs:\\
@@ -724,6 +761,11 @@ $max\;Z = 3x_1 + 4x_2$\\ \hspace{10mm}
 \indent \indent $2x_1 + x_2\;\leq\;5$\\
 \indent \indent $x_1, x_2\;\geq\;0$\\
 yield the output: $Z = 16$, which is the optimal solution.
+
+\wss{You have more output variabilities than this.  You have the decision on
+  whether the output includes the $x$ values, or not.  You could output to the
+  screen, or to a file, or to memory.  The format of the output could be a
+  variability.}
 
 \section{Requirements} \label{Sec_Requirements}
 
@@ -801,7 +843,9 @@ qualities that the software is expected to exhibit.
 	support for greater than or equal to inequalities in the linear constraints.
 	
 	\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_moreAlgorithms}:] The 
-	support for additional linear programming algorithms.
+	support for additional linear programming algorithms.  \wss{You could
+          name some other algorithms, like the criss-cross algorithm, or
+          interior point methods.}
 \end{itemize}
 
 \section{Traceability Matrices and Graphs} \label{Sec_TraceabilityMatrix}
