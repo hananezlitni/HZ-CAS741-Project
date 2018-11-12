@@ -22,7 +22,7 @@
 \begin{document}
 
 \title{A Library of Simplex Method Solvers: System Verification and Validation 
-Plan} 
+Plan \wss{put your library name in the title}} 
 \author{Hanane Zlitni}
 \date{October 22, 2018}
 	
@@ -69,15 +69,20 @@ October 22, 2018 & 1.0 & First Draft\\
 
 \listoffigures
 
+\wss{if you don't have any figures, you can comment out this heading}
+
 \newpage
 
 \pagenumbering{arabic}
 
-This document describes the system verification and validation (V\&V) plan for 
-the Library of Simplex Method Solvers (\famname{}) tool. It is based on the 
-tool's commonality analysis (CA) that can be found, along with the full 
-documentation of \famname{}, in the following link:  
-\url{https://github.com/hananezlitni/HZ-CAS741-Project}.
+This document describes the system verification and validation (V\&V) plan for
+the Library of Simplex Method Solvers (\famname{}) tool. \wss{I recently
+  modified the blank project template to put the (equivalent of) the famname
+  command in a common file, which can be shared between all your files.  You
+  might want to do the same.}  It is based on the tool's commonality analysis
+(CA) that can be found, along with the full documentation of \famname{}, in the
+following link: \url{https://github.com/hananezlitni/HZ-CAS741-Project}.
+\wss{nice to include this link}
 
 The V\&V plan starts by providing general information about the tool and this 
 document in Section \ref{GeneralInfo}. Then, Section \ref{Plan} provides 
@@ -110,6 +115,7 @@ for the corresponding inputs), while providing satisfactory usability.
 \subsection{References}
 
 Different sections in this document refer to the tool's CA (\cite{losms-ca}).
+\wss{You should reference your SRS here.}
 
 \section{Plan} \label{Plan}
 	
@@ -119,14 +125,22 @@ The verification and validation team consists of one member: Hanane Zlitni.
 
 \subsection{SRS Verification Plan}
 
-The CA for the \famname{} tool will be verified by getting feedback from Dr. 
-Spencer Smith and my CAS 741 classmates which comes from formal reviews of the 
-document. 
+The CA for the \famname{} tool will be verified by getting feedback from Dr.
+Spencer Smith \wss{\LaTeX{} has a rule that it inserts two spaces at the end of
+  a sentence.  It detects a sentence as a period followed by a capital letter.
+  This comes up, for instance, with Dr. Smith.  Since the period after Dr.\
+  isn't actually the end of a sentence, you need to tell \LaTeX{} to insert one
+  space.  You do this either by Dr.\ Smith (if you don't mind a line-break
+  between Dr.\ and Smith), or Dr.~Spencer Smith (to force \LaTeX{} to not insert
+  a line break).} and my CAS 741 classmates which comes from formal reviews of
+the document.
 
 The feedback from Dr. Smith is expressed as comments written in the actual 
 document. The feedback from the CAS 741 students, on the other hand, is 
 expressed as issues posted in the project's GitHub repository. After getting 
-the comments, I apply them one by one and make changes in the document.
+the comments, I apply them one by one and make changes in the document. \wss{You
+  could be more specific (using Repos.xlsx) on who exactly is going to review
+  your documentation.}
 
 \subsection{Design Verification Plan}
 
@@ -157,10 +171,16 @@ Not applicable for \famname{}.
 System testing for the \famname{} tool ensures that the correct inputs produce 
 the correct outputs. The test cases in this section are derived from the 
 instance models and the requirements detailed in the tool's CA.
-	
+
 \subsection{Tests for Functional Requirements}
 
+\wss{It would be nice to have a blurb here to explain why the subsections below
+  cover the requirements.  References to the SRS would be good.}
+
 \subsubsection{Tests for Solving Maximization Linear Programs}
+
+\wss{It would be nice to have a blurb here to explain why the subsections below
+  cover the requirements.  References to the SRS would be good.}
 
 \begin{enumerate}
 	\item{\textbf{T1: Unique Optimal Solution}}
@@ -179,7 +199,9 @@ instance models and the requirements detailed in the tool's CA.
 	
 	How test will be performed: Unit testing using JUnit/PyUnit
 	
-	Test Case Derivation: IM1 in \cite{losms-ca}
+	Test Case Derivation: IM1 in \cite{losms-ca} \wss{good to have a field
+          for test case derivation.  I might have to add that to the blank
+          template.  :-)}
 
 	\item{\textbf{T2: Multiple Optimal Solutions}}
 	
@@ -262,6 +284,10 @@ instance models and the requirements detailed in the tool's CA.
 \end{enumerate}
 
 \subsubsection{Tests for Faulty Inputs}
+
+\wss{It would be nice to have a blurb here to explain why the subsections below
+  cover the requirements.  References to the SRS would be good.  In this case,
+  you could reference any table of data constraints.}
 
 \begin{enumerate}
 	\item{\textbf{T6: No Objective Function}}
@@ -351,6 +377,8 @@ instance models and the requirements detailed in the tool's CA.
 	Test Case Derivation: A2 in \cite{losms-ca}
 \end{enumerate}
 
+\wss{Seems like good coverage.}
+
 \subsection{Tests for Nonfunctional Requirements}
 
 \subsubsection{Usability}
@@ -366,10 +394,12 @@ instance models and the requirements detailed in the tool's CA.
 						
 	Output/Result: -
 						
-	How test will be performed: Asking participants to try the tool then answer 
-	the usability survey questions (see Appendix \ref{UsabilityTesting}). The 
-	goal is to ensure that the library provided the services the users 
-	requested and that they are satisfied with the results obtained.
+	How test will be performed: Asking participants to try the tool \wss{you
+          should clarify that you are going to make a tool using your library}
+        then answer the usability survey questions (see Appendix
+        \ref{UsabilityTesting}). The goal is to ensure that the library provided
+        the services the users requested and that they are satisfied with the
+        results obtained.
 \end{enumerate}
 
 \subsubsection{Portability}
@@ -404,6 +434,8 @@ instance models and the requirements detailed in the tool's CA.
 	
 	How test will be performed: I plan to report the relative error of the 
 	expected output for each test case detailed in this document
+        \wss{great!}
+
 \end{enumerate}
 
 \subsubsection{Correctness \& Performance}
@@ -437,7 +469,9 @@ instance models and the requirements detailed in the tool's CA.
 	Output/Result: -
 	
 	How test will be performed: Use the library to solve problems with great 
-	number of inputs and observe how it would behave
+	number of inputs and observe how it would behave \wss{You need to be
+          more specific.}
+
 \end{enumerate}
 
 \subsection{Traceability Between Test Cases and Requirements}
@@ -527,5 +561,7 @@ There are no symbolic parameters used in this document.
 	
 	Why have you given the above score?
 \end {enumerate}
+
+\wss{Good survey questions.}
 
 \end{document}
