@@ -34,7 +34,8 @@
 
 \begin{document}
 
-\title{Module Guide: A Library of Simplex Method Solvers} 
+\title{Module Guide: A Library of Simplex Method Solvers \wss{Work the name of
+    your library into your MG title}} 
 \author{Hanane Zlitni}
 \date{November 05, 2018}
 
@@ -291,7 +292,11 @@ selected.
 \begin{description}
 	\item[Secrets:]The library's inner modules.
 	\item[Services:]Provides the external interface which is the communication 
-	link between the client programs and the inner \famname{} modules.
+	link between the client programs and the inner \famname{}
+        modules. \wss{I'm interested in this approach.  I wonder if you are just
+          going to be renaming the access programs for the modules that this
+          module uses.  In that case, this module wouldn't likely be that
+          useful.  We'll have a better idea as you develop your MIS.}
 	\item[Implemented By:] \famname{}
 \end{description}
 
@@ -393,7 +398,17 @@ R8 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
 
 \hz{Is it okay that I didn't include M2 (BH Module) in the tables? Since there 
 aren't any BH modules in the hierarchy, I didn't know how to map it with the Rs 
-and the ACs}
+and the ACs} \wss{Yes, this is fine.  The only modules you need to include in the
+traceability are the leaf modules.}
+
+\wss{You have two cases where anticipated changes map to more than one module.
+  You should explain why this has occurred.  The normal goal is one module, one
+  change.  The modules around the input do seem odd.  Could the input module
+  have a service (access program) related to conversion?  Do you really need a
+  separate module.  Maybe in this case you feel like you have two secrets, but
+  if the two secrets always happen together, then module consolidation might
+  make sense.  As you write your MIS, it should become clear whether you really
+  have two modules.}
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
 
@@ -414,6 +429,14 @@ because they use modules from the lower levels.
 \caption{Use Hierarchy Among Modules}
 \label{FigUH}
 \end{figure}
+
+\wss{You indicate that the external interface modules uses the output module
+  with two different arrows.  This isn't wrong, but it is confusing.  Does the
+  output module really use the simplex method solver?  It seems tome that the
+  external interface module would use the simplex solver and then relay the
+  results to the output module.  Will the output module actually call the
+  simplex solver itself?  I would think that the input module would use the data
+  structure module, not the other way around?}
 
 \newpage
 
