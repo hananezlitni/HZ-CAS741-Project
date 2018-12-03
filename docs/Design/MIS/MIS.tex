@@ -58,8 +58,8 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-December 03, 2018 & 1.1 & Correction of solveLP() access program definition in 
-8.4.4\\
+December 03, 2018 & 1.1 & Corrected solveLP() and pivot() pseudo-code in 8.4.4 
+and 8.4.5\\
 November 24, 2018 & 1.0 & First draft\\
 \bottomrule
 \end{tabularx}
@@ -580,6 +580,7 @@ pivot(\textit{tableau}, \textit{pivotRow}, \textit{pivotColumn}):
 \hspace*{0.3cm} start \\
 \hspace*{2cm} for each \textit{row} in \textit{pivotColumn} \\
 \hspace*{3cm} perform a row operation to make entry 0 \\
+\hspace*{2cm} return \textit{tableau} \\
 \hspace*{0.9cm} end \\
 
 ~\newpage
