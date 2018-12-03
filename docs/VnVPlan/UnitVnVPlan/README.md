@@ -1,5 +1,3 @@
-# Test Plan
+# Unit Verification & Validation Plan
 
-The folders and files for this folder are as follows:
-
-Describe ...
+This folder contains the project's unit verification and validation plan in .pdf and .tex formats.

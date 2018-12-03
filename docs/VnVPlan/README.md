@@ -1,3 +1,3 @@
 # Verification & Validation Plan
 
-This folder contains the project's system verification and validation plan.
+This folder contains the project's system and unit verification and validation plans.
