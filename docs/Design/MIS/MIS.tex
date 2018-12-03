@@ -58,6 +58,8 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+December 03, 2018 & 1.1 & Correction of solveLP() access program definition in 
+8.4.4\\
 November 24, 2018 & 1.0 & First draft\\
 \bottomrule
 \end{tabularx}
@@ -500,10 +502,11 @@ None
 		\hline
 		\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 		\hline
-		solveLP & TableauT, boolean & $R^x$, $R^m$ & NO\_OPTIMAL\_SOLUTION \\
+		solveLP & TableauT, boolean & - & NO\_OPTIMAL\_SOLUTION \\
 		getZ & - & $R^x$ & - \\
 		getK & - & $R^m$ & - \\
 		setZ & $R^x$ & - & - \\
+		setK & $R^m$ & - & - \\
 		\hline
 	\end{tabular}
 \end{center}
@@ -537,12 +540,12 @@ solveLP(\textit{tableau}, \textit{wasMin}):
 			\textit{pivotColumn})
 			\item Repeat 1 and 2 until there are no negative values in the last 
 			row (excluding the last column)
-			\item (\textit{wasMin} == True) \hspace{2cm} $\Rightarrow$ 
-			setZ($Z'$) ; where $Z'$ = -$Z$
+			\item setZ(\textit{optimalSolution})
+			\item setK(\textit{points})
+			%%\item (\textit{wasMin} == True) \hspace{2cm} $\Rightarrow$ 
+			%%setZ($Z'$) ; where $Z'$ = -$Z$
 		\end{enumerate}
-	
-	
-	
+
 	\item output: -
 	\item exception: \textit{exc} := 
 	
