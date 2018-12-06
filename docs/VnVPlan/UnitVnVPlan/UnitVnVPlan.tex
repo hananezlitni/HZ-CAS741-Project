@@ -3,6 +3,7 @@
 \usepackage{amsmath, mathtools}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{xr}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -14,6 +15,8 @@
 \usepackage[round]{natbib}
 
 \input{../../Comments}
+\externaldocument{../SystVnVPlan/SystVnVPlan}
+\externaldocument{../../Design/MIS/MIS}
 %%\input{../../Common}
 
 \newcommand{\progname}{Library of Simplex Method Solvers}
@@ -34,7 +37,8 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & First Draft\\
+December 6, 2018 & 1.1 & Applied Brooks MacLachlan's Comments Posted on GitHub\\
+December 3, 2018 & 1.0 & First Draft\\
 \bottomrule
 \end{tabularx}
 
@@ -48,12 +52,7 @@ Date 1 & 1.0 & First Draft\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See MIS Documentation at 
-\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/Design/MIS/MIS.pdf}.
-\\
-
-The following are additional symbols, abbreviations or acronyms used in this 
-document: \\
+The following are symbols, abbreviations or acronyms used in this document: \\
 
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{l l} 
@@ -61,6 +60,10 @@ document: \\
   \textbf{symbol} & \textbf{description}\\
   \midrule 
   T & Test\\
+  $Z$ & Optimal solution(s) of the objective function\\
+  $K$ & The points where the optimal solution(s) occur\\
+  MIS & Module Interface Specification\\
+  V\&V & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
 
@@ -68,10 +71,10 @@ document: \\
 
 \pagenumbering{arabic}
 
-This document describes the unit verification and validation (V\&V) plan for
+This document describes the unit Verification and Validation (V\&V) plan for
 the Library of Simplex Method Solvers (\famname{}) tool. It is intended to be a 
-refinement of the tool's system (V\&V) plan by providing test cases based on 
-the modules in the library's module interface specification (MIS) document. The 
+refinement of the tool's system V\&V plan by providing test cases based on 
+the modules in the library's Module Interface Specification (MIS) document. The 
 MIS, along with the full documentation of \famname{}, can be found at: 
 \url{https://github.com/hananezlitni/HZ-CAS741-Project}.
 
@@ -98,7 +101,7 @@ programming problem.
 \subsection{Scope}
 
 All the modules, except for the output module, will be verified using the test 
-cases in this document and the System VnV Plan (found at: 
+cases in this document and the System V\&V Plan (found at: 
 \url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}).
  The reason for excluding the output module is because its sole responsibility 
  is to display the solution and there are no calculations included in it. 
@@ -139,7 +142,7 @@ and categorized based on the modules in the MIS document.
 The input module is responsible for receiving the necessary inputs, verifying 
 them and throwing an exception in case of a violation.
 
-The test cases T6-T9 in sub-section 5.1.3 in the System VnV Plan cover the 
+The test cases T6-T9 in \ref{TestInputs} in the System V\&V Plan cover the 
 cases related to the input module. The document can be found at: 
 \url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}
 
@@ -159,8 +162,8 @@ when negating the objective function is needed.
 
 \begin{enumerate}
 		
-	\item{\textbf{T1: Test canonical form conversion for max problems with less 
-	than or equal to inequalities}}
+	\item{\textbf{T1: Test canonical form conversion for maximization problems 
+	with less than or equal to inequalities}}
 		
 	Control: Automatic 
 		
@@ -182,15 +185,15 @@ when negating the objective function is needed.
 	2 & 1 & -1 & 0 & 0 & 0 & 1 & 10\\
 	\end{bmatrix}$
 	
-	Test Case Derivation: Section 7 in the MIS (\cite{losms-mis})
+	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
 		
 	How test will be performed: PyTest and/or Mock
 	
 	\hz{Explanation: Since the linear constraints are less than or equal to 
 	(from calling getLCsType()), the slack variables are added to the matrix} \\
 
-	\item{\textbf{T2: Test canonical form conversion for min problems with less 
-			than or equal to inequalities}}
+	\item{\textbf{T2: Test canonical form conversion for minimization problems 
+	with less than or equal to inequalities}}
 	
 	Control: Automatic 
 	
@@ -210,7 +213,7 @@ when negating the objective function is needed.
 	7 & 4 & 0 & 0 & 1 & 16\\
 	\end{bmatrix}$ , wasMin = True
 	
-	Test Case Derivation: Section 7 in the MIS (\cite{losms-mis})
+	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
 	
 	How test will be performed: PyTest and/or Mock
 	
@@ -234,15 +237,15 @@ when negating the objective function is needed.
 	7 & 4 & 0 & 0 & 1 & 16\\
 	\end{bmatrix}$
 	
-	Test Case Derivation: Section 7 in the MIS (\cite{losms-mis})
+	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
 	
 	How test will be performed: PyTest and/or Mock
 	
 	\hz{Explanation: T1 and T2 are also tests for updateTableau(), since the 
 	conversion to the canonical form cannot be done without updating the 
 	tableau. Since they don't cover if updateTableau() was called for 
-	converting max to min (negating the first row in the tableau), I added T3 
-	to test that case.}
+	converting maximization to minimization (negating the first row in the 
+	tableau), I added T3 to test that case.}
 
 \end{enumerate}
 
@@ -251,12 +254,12 @@ when negating the objective function is needed.
 The simplex solver module is responsible for performing the simplex method 
 steps to calculate the optimum and the points where it occurs.
 
-The following test cases were selected to cover the cases for solving min and 
-max problems.
+The following test cases were selected to cover the cases for solving 
+minimization and maximization problems.
 
 \begin{enumerate}
 	
-	\item{\textbf{T4: Test solveLP() for min problems}}
+	\item{\textbf{T4: Test solveLP() for minimization problems}}
 
 	Control: Automatic
 	
@@ -272,11 +275,12 @@ max problems.
 	
 	Z = [-4.57] , K = [2.29 , 0]
 	
-	Test Case Derivation: Section 8 in the MIS (\cite{losms-mis})
+	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
+	(\cite{losms-mis})
 	
 	How test will be performed: PyTest and/or Mock
 	
-	\item{\textbf{T5: Test solveLP() for max problems}}
+	\item{\textbf{T5: Test solveLP() for maximization problems}}
 	
 	Control: Automatic
 	
@@ -293,7 +297,8 @@ max problems.
 	
 	Z = [3] , K = [0, 0, 3]
 	
-	Test Case Derivation: Section 8 in the MIS (\cite{losms-mis})
+	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
+	(\cite{losms-mis})
 	
 	How test will be performed: PyTest and/or Mock
 		
@@ -301,9 +306,9 @@ max problems.
 
 \subsection{Tests for Nonfunctional Requirements}
 
-The test cases T11-T15 in section 5.2 in the System VnV Plan cover the 
-non-functional requirements (qualities) that are important for \famname{}. The 
-document can be found at: 
+The test cases T11-T15 in section \ref{NonFunctionalTests} in the System V\&V 
+Plan cover the non-functional requirements (qualities) that are important for 
+\famname{}. The document can be found at: 
 \url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}
 
 \subsection{Traceability Between Test Cases and Modules}
@@ -314,7 +319,7 @@ document can be found at:
 		\hline	
 		\textbf{Test Case Number} & \textbf{Module}\\
 		\hline 
-		T6-T9 in System VnV Plan& Input Module\\ \hline
+		T6-T9 in System V\&V Plan& Input Module\\ \hline
 		T1& Tableau Module\\ \hline
 		T2& Tableau Module\\ \hline
 		T3& Tableau Module\\ \hline
