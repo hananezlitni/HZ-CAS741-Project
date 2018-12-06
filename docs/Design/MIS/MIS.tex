@@ -58,6 +58,7 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+December 06, 2018 & 1.2 & Applied Olu Owojaiye's Comments Posted on GitHub\\
 December 03, 2018 & 1.1 & Corrected solveLP() and pivot() pseudo-code in 8.4.4 
 and 8.4.5\\
 November 24, 2018 & 1.0 & First draft\\
@@ -550,6 +551,42 @@ solveLP(\textit{tableau}, \textit{wasMin}):
 	\item exception: \textit{exc} := 
 	
 	($Z$ == NULL) \hspace{3.7cm} $\Rightarrow$ NO\_OPTIMAL\_SOLUTION
+\end{itemize}
+
+\noindent 
+getZ():
+\begin{itemize}
+	\item transition: -
+	\item output: \textit{out} := $Z$
+	\item exception: -
+\end{itemize}
+
+\noindent 
+getK():
+\begin{itemize}
+	\item transition: -
+	\item output: \textit{out} := $K$
+	\item exception: -
+\end{itemize}
+
+\noindent 
+setZ(\textit{newZ}):
+\begin{itemize}
+	\item transition: 
+	
+	$Z$ := newZ
+	\item output: -
+	\item exception: -
+\end{itemize}
+
+\noindent 
+setK(\textit{newK}):
+\begin{itemize}
+	\item transition: 
+	
+	$K$ := newK
+	\item output: -
+	\item exception: -
 \end{itemize}
 
 \subsubsection{Local Functions}
