@@ -209,11 +209,8 @@ actually be implemented.
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
 \item [\refstepcounter{mnum} \mthemnum \label{mBH}:] Behaviour-Hiding Module
-\item [\refstepcounter{mnum} \mthemnum \label{mEI}:] External Interface Module
 \item [\refstepcounter{mnum} \mthemnum \label{mInput}:] Input Module
-\item [\refstepcounter{mnum} \mthemnum \label{mIC}:] Input Conversion Module
-\item [\refstepcounter{mnum} \mthemnum \label{mDataStructure}:] Data Structure 
-Module
+\item [\refstepcounter{mnum} \mthemnum \label{mTableau}:] Tableau Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSimplex}:] Simplex Method Solver
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Module
 \end{description}
@@ -242,10 +239,8 @@ problems and one for minimization problems.
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module}
-& External Interface\\
 & Input\\ 
-& Input Conversion\\
-& Data Structure\\
+& Tableau\\
 & Simplex Method Solver\\
 & Output\\
 \bottomrule
@@ -315,19 +310,6 @@ selected.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{External Interface Module (\mref{mEI})}
-
-\begin{description}
-	\item[Secrets:]The library's inner modules.
-	\item[Services:]Provides the external interface which is the communication 
-	link between the client programs and the inner \famname{}
-        modules. \wss{I'm interested in this approach.  I wonder if you are just
-          going to be renaming the access programs for the modules that this
-          module uses.  In that case, this module wouldn't likely be that
-          useful.  We'll have a better idea as you develop your MIS.}
-	\item[Implemented By:] \famname{}
-\end{description}
-
 \subsubsection{Input Module (\mref{mInput})}
 
 \begin{description}
@@ -338,18 +320,8 @@ selected.
 	\item[Implemented By:] \famname{}
 \end{description}
 
-\subsubsection{Input Conversion Module (\mref{mIC})}
-
-\begin{description}
-	\item[Secrets:]The way the inputs are converted to the forms needed for the 
-	simplex method solver module.
-	\item[Services:]Converts the inputs to the standard and canonical forms 
-	which are needed for the simplex method solver module.
-	\item[Implemented By:] \famname{}
-\end{description}
-
-\subsubsection{Data Structure Module (\mref{mDataStructure})}
-
+\subsubsection{Tableau Module (\mref{mTableau})}
+\hz{needs editing}
 \begin{description}
 	\item[Secrets:]The data structure for a matrix (i.e. the simplex method 
 	tableau).
@@ -379,7 +351,7 @@ selected.
 \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
-
+\hz{needs editing}
 This section shows two traceability matrices: between the modules and the
 requirements and between the modules and the anticipated changes.
 
@@ -439,7 +411,7 @@ traceability are the leaf modules.}
   have two modules.}
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
-
+\hz{needs editing}
 In this section, the uses hierarchy between modules is
 provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
 correct execution of B may be necessary for A to complete the task described in
