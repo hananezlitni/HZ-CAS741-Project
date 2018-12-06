@@ -280,6 +280,11 @@ minimization and maximization problems.
 	
 	How test will be performed: PyTest and/or Mock
 	
+	Note: Since this test case includes the comparison of floats and they're 
+	usually not exactly equal, the function \textit{math.isclose()} that Python 
+	3 provides will be used. By using this function, a small difference between 
+	the two floats being compared will be allowed. (Source: \cite{python3-doc}).
+	
 	\item{\textbf{T5: Test solveLP() for maximization problems}}
 	
 	Control: Automatic
