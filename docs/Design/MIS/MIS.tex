@@ -225,7 +225,12 @@ row (because we want to exclude the objective function).}
 
 \subsubsection{State Variables}
 
-None
+\begin{itemize}
+	\item objcFunc:$\mathbb{R} ^m$
+	\item LCs:$\mathbb{R} ^{n*m}$
+	\item LCsType:lctEnum$^{n-1}$ ; where lctEnum = $\{0,1,2\}$
+	\item goal:gEnum ; where gEnum = $\{0,1\}$
+\end{itemize}
 
 \subsubsection{Environment Variables}
 
@@ -241,7 +246,7 @@ None
 getObjcFunc():
 \begin{itemize}
 	\item transition: -
-	\item output: \textit{out} := objcFunc:$\mathbb{R} ^m$
+	\item output: \textit{out} := objcFunc
 	\item exception: -
 \end{itemize}
 
@@ -249,7 +254,7 @@ getObjcFunc():
 getLCs():
 \begin{itemize}
 	\item transition: -
-	\item output: \textit{out} := LCs:$\mathbb{R} ^{n*m}$
+	\item output: \textit{out} := LCs
 	\item exception: -
 \end{itemize}
 
@@ -257,9 +262,7 @@ getLCs():
 getLCsType():
 \begin{itemize}
 	\item transition: -
-	\item output: \textit{out} := 
-	
-	LCsType:lctEnum$^{n-1}$ ; where lctEnum = $\{0,1,2\}$ 
+	\item output: \textit{out} := LCsType
 	\item exception: -
 \end{itemize}
 
@@ -267,9 +270,7 @@ getLCsType():
 getGoal():
 \begin{itemize}
 	\item transition: -
-	\item output: \textit{out} := 
-	
-	goal:gEnum ; where gEnum = $\{0,1\}$
+	\item output: \textit{out} := goal
 	\item exception: -
 \end{itemize}
 
