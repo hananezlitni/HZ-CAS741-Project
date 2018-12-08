@@ -151,6 +151,9 @@ The test cases T6-T9 in \ref{TestInputs} in the System V\&V Plan cover the
 cases related to the input module. The document can be found at: 
 \url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}
 
+The setters and getters in this module were excluded because they do not 
+involve any calculations.
+
 \hz{fix labels of test cases in system plan and use cross-ref here} 
 
 \subsubsection{Tableau Module}
@@ -166,6 +169,10 @@ achieving branch coverage.
 
 In addition, a test case was selected for updateTableau() to cover the case 
 when negating the objective function is needed.
+
+The module's constructor (access program \textit{TableauT} in MIS), setters 
+and getters were excluded from this section because they do not include 
+calculations.
 
 \begin{enumerate}
 		
@@ -284,7 +291,8 @@ The simplex solver module is responsible for performing the simplex method
 steps to calculate the optimum and the points where it occurs.
 
 The following test cases were selected to cover the cases for solving 
-minimization and maximization problems.
+minimization and maximization problems. The module's setters and getters were 
+excluded from this section because they do not include calculations.
 
 \begin{enumerate}
 	
@@ -382,6 +390,27 @@ minimization and maximization problems.
 	Output: No output, but the state changes to:
 	
 	K = [0, 0, 3]
+	
+	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
+	(\cite{losms-mis})
+	
+	How test will be performed: PyTest and/or Mock
+	
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpNoSol}: 
+	Test solveLP() for a problem with no optimal solution}}
+	
+	Control: Automatic
+	
+	Initial State: Z = [ ], K = [ ]
+	
+	Input: 	$\begin{bmatrix}
+	-2 & -1 & 1 & 0 & 0 & 0\\
+	1 & -1 & 0 & 1 & 0 & 10\\
+	2 & -1 & 0 & 0 & 1 & 40\\
+	\end{bmatrix}$ , False 
+	
+	Output: Exception (``This linear program does not have an optimal 
+	solution'')
 	
 	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
 	(\cite{losms-mis})
