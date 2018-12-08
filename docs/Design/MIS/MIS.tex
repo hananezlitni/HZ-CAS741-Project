@@ -205,6 +205,10 @@ None
 		getLCs & - & $\mathbb{R} ^{n*m}$ & - \\
 		getLCsType & - & lctEnum$^{n-1}$ & - \\
 		getGoal & - & gEnum & - \\
+		setObjcFunc & $\mathbb{R} ^m$ & - & - \\
+		setLCs & $\mathbb{R} ^{n*m}$ & - & - \\
+		setLCsType & lctEnum$^{n-1}$ & - & - \\
+		setGoal & gEnum & - & - \\
 		\hline
 	\end{tabular}
 \end{center}
@@ -271,6 +275,46 @@ getGoal():
 \begin{itemize}
 	\item transition: -
 	\item output: \textit{out} := goal
+	\item exception: -
+\end{itemize}
+
+\noindent 
+setObjcFunc(\textit{newObjcFunc}):
+\begin{itemize}
+	\item transition: 
+	
+	objcFunc := newObjcFunc
+	\item output: -
+	\item exception: -
+\end{itemize}
+
+\noindent 
+setLCs(\textit{newLCs}):
+\begin{itemize}
+	\item transition: 
+	
+	LCs := newLCs
+	\item output: -
+	\item exception: -
+\end{itemize}
+
+\noindent 
+setLCsType(\textit{newLCsType}):
+\begin{itemize}
+	\item transition: 
+	
+	LCsType := newLCsType
+	\item output: -
+	\item exception: -
+\end{itemize}
+
+\noindent 
+setGoal(\textit{newGoal}):
+\begin{itemize}
+	\item transition: 
+	
+	goal := newGoal
+	\item output: -
 	\item exception: -
 \end{itemize}
 
