@@ -225,6 +225,23 @@ row (because we want to exclude the objective function).}
 \hz{2. \textit{gEnum}: an enumerated type representing the LP goal: 0 (min) or 
 1 (max).}
 
+\wss{This seems like important information to put in comments.  Comments are not
+  displayed with the final documentation, so important information needs to be
+  included with the main text.}
+
+\wss{For these types you are defining, \textit{lctEnum} and \textit{gEnum},
+  please do not use integers that map to something meaningful.  Mathematically
+  you can define a set for elements of this type.  A language like Python gives
+  you enumerated types, so you can implement your new types easily.  Hoffmann
+  and Strooper show simple examples of defining new types.  You will have
+  something like \textit{gEnum} $= \{ \text{Min}, \text{Max} \}$.  You can
+  export these types, so that other modules can use them.  If there are many new
+types like this, you can create a new modules whose purpose is to export the
+``global'' types that you will be using.}
+
+\wss{My comments about these explanation comments and types applies throughout
+  your document.}
+
 \subsection{Semantics}
 
 \subsubsection{State Variables}
@@ -337,7 +354,8 @@ validateInputs():
 	\item exception: \textit{exc} := 
 	
 	$\neg$(Last element of LCsType == 2 AND  Last element of LCs == 0) 
-	$\Rightarrow$ INVALID{\_}INPUT \\
+	$\Rightarrow$ INVALID{\_}INPUT \wss{This is math, not a programming
+          language, so tests for equality just  use $=$}\\
 	
 	\hz{Explanation:}
 	
@@ -408,6 +426,15 @@ operation that will be performed on the tableau to update its values.}
 	\item goal:gEnum ; where gEnum = $\{0,1\}$
 	\item wasMin:boolean 
 \end{itemize}
+
+\wss{You shouldn't be defining types here.  Seeing that these types are coming
+  up again, I suggest you add a module to your design that exports types.}
+
+\wss{Why do you have two modules with the same state variables (goal etc.).
+  This makes it seem like the design is not completely thought out.  Why can't
+  your Tableau module use  your input module to get the values it needs?  Or
+  maybe you don't need an input module.  As we discussed in class, most of your
+  design could be encapsulated in the tableau module.}
 
 \hz{Explanation:}
 
@@ -494,7 +521,7 @@ updateTableau(\textit{operation}):
 		row of sTableau by -1
 		\item (operation == 1) \hspace{3cm} $\Rightarrow$ add slack variables 
 		coefficients to sTableau
-	\end{enumerate}
+	\end{enumerate} \wss{Use a conditional rule to express this}
 	\item output: -
 	\item exception: -
 \end{itemize}
@@ -571,10 +598,16 @@ None
 
 \subsubsection{State Variables}
 
-\begin{itemize}
+\begin{itemize} 
 	\item $Z:\mathbb{R}^x$
 	\item $K:\mathbb{R}^m$
 \end{itemize}
+
+\wss{Add a brief statement on what each state variables is.  I remember what $Z$
+  is, but I forget what $K$ means.}
+\wss{Using the types $\mathbb{R}^x$ is confusing, since $x$ usually represents a
+  real value.}
+\wss{Would it be easier if you added a solver method to your tableau module?}
 
 \subsubsection{Environment Variables}
 
