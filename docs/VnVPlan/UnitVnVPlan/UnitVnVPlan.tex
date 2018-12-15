@@ -112,6 +112,9 @@ cases in this document and the System V\&V Plan (found at:
  is to display the solution and there are no calculations included in it. 
  Therefore, priority was given for the other modules.
 
+\wss{I suggest you give the specific names of the modules that will be
+  verified.  A reference to the MG would also be a good idea.}
+
 \section{Plan} \label{Plan}
 	
 \subsection{Verification and Validation Team}
@@ -205,7 +208,13 @@ calculations.
 	How test will be performed: PyTest and/or Mock
 	
 	\hz{Explanation: Since the linear constraints are less than or equal to 
-	(from calling getLCsType()), the slack variables are added to the matrix} \\
+	(from calling getLCsType()), the slack variables are added to the
+        matrix} \\
+
+      \wss{I like your explanations; they add to the document.  Unfortunately
+        they will disappear when the comments are turned off.  I suggest that
+        you move this information out of the comment and into the document.  You
+        might even keep the heading explanation and add it to your template.}
 
 	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{canonicalSlack}: 
 	Test canonical form conversion for less than or equal to inequalities: 
@@ -447,6 +456,8 @@ Plan cover the non-functional requirements (qualities) that are important for
 	\caption{Traceability Between Test Cases and Modules}
 	\label{Table:Traceability} 
 \end{table}
+
+\wss{test cases look good.}
 
 \newpage
 
