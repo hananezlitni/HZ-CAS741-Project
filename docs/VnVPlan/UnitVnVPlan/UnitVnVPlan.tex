@@ -29,7 +29,7 @@
 
 \begin{document}
 
-\title{\famname{}: Unit Verification and Validation Plan for a \progname{}} 
+\title{Unit Verification and Validation Plan for a \progname{} (\famname{})} 
 \author{Hanane Zlitni}
 \date{December 3, 2018}
 	
@@ -42,6 +42,9 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+December 17, 2018 & 2.0 & Final Draft (includes making the document consistent 
+with the rest of the deliverables)\\
+December 16, 2018 & 1.2 & Applied Dr.~Smith’s Comments\\
 December 6, 2018 & 1.1 & Applied Brooks MacLachlan's Comments Posted on GitHub\\
 December 3, 2018 & 1.0 & First Draft\\
 \bottomrule
@@ -66,9 +69,13 @@ The following are symbols, abbreviations or acronyms used in this document: \\
   \midrule 
   T & Test\\
   $Z$ & Optimal solution(s) of the objective function\\
-  $K$ & The points where the optimal solution(s) occur\\
   MIS & Module Interface Specification\\
   V\&V & Verification and Validation\\
+  LCs & Linear Constraints\\
+  ObjcFunc & Objective Function\\
+  Const & Constants\\
+  max & Maximization\\
+  min & Minimization\\
   \bottomrule
 \end{tabular}\\
 
@@ -81,7 +88,7 @@ the Library of Simplex Method Solvers (\famname{}) tool. It is intended to be a
 refinement of the tool's system V\&V plan by providing test cases based on 
 the modules in the library's Module Interface Specification (MIS) document. The 
 MIS, along with the full documentation of \famname{}, can be found at: 
-\url{https://github.com/hananezlitni/HZ-CAS741-Project}.
+\url{https://github.com/hananezlitni/HZ-CAS741-Project}.\\
 
 The unit V\&V plan starts by providing general information about the tool in 
 Section \ref{GeneralInfo}. Then, Section \ref{Plan} provides additional details 
@@ -103,17 +110,26 @@ accepts the objective function, the objective function goal (maximization or
 minimization) and the linear constraints and outputs the optimum of the linear 
 programming problem.
 
-\subsection{Scope}
+\subsection{Scope} \label{Scope}
 
-All the modules, except for the output module, will be verified using the test 
-cases in this document and the System V\&V Plan (found at: 
-\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}).
- The reason for excluding the output module is because its sole responsibility 
- is to display the solution and there are no calculations included in it. 
- Therefore, priority was given for the other modules.
+The core module of the library is the simplex solver module. It contains all 
+components of the tool from reading the inputs to calculating and obtaining the 
+output. Specifically, the function \textit{solveLP()} is the one that will be 
+the focus of unit testing because all other functions are going to be called 
+during its execution. Therefore, the test cases in this document, and the 
+System V\&V Plan (found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}),
+ are selected to cover all possible cases that could happen to 
+\textit{solveLP()}. \\
+
+Some test cases are selected to cover the cases of the occurence of exceptions. 
+These will help verify the exceptions module along with the solver module. \\
+
+More information about the modules can be found in the MG document at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/Design/MG/MG.pdf}.
 
 \wss{I suggest you give the specific names of the modules that will be
-  verified.  A reference to the MG would also be a good idea.}
+  verified.  A reference to the MG would also be a good idea.}\hz{done}
 
 \section{Plan} \label{Plan}
 	
@@ -123,11 +139,8 @@ The verification and validation team consists of one member: Hanane Zlitni.
 
 \subsection{Automated Testing and Verification Tools}
 
-PyTest, a unit testing framework for Python, will be used for automated 
-testing. Code coverage would be achieved by selecting test cases that cover 
-every possible statement and branch. In addition, Python's Mock library will be 
-used to replace parts of the modules with mock objects and check their 
-behaviour.
+Unittest, a unit testing framework for Python, will be used for automated 
+testing. Code coverage would be verified using Coverage.py.
 
 \subsection{Non-Testing Based Verification}
 
@@ -137,7 +150,7 @@ Not applicable for \famname{}.
 
 The test cases discussed in this section were selected to ensure that the 
 library does correctly what it is intended to do while maintaining quality. The 
-test cases are derived from the tool's MIS document which can be found at: 
+test cases were derived from the tool's MIS document which can be found at: 
 \url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/Design/MIS/MIS.pdf}
 
 \subsection{Tests for Functional Requirements}
@@ -145,295 +158,117 @@ test cases are derived from the tool's MIS document which can be found at:
 The following are the test cases related to the tool's functional requirements 
 and categorized based on the modules in the MIS document.
 
-\subsubsection{Input Module}
-
-The input module is responsible for receiving the necessary inputs, verifying 
-them and throwing an exception in case of a violation.
-
-The test cases T6-T9 in \ref{TestInputs} in the System V\&V Plan cover the 
-cases related to the input module. The document can be found at: 
-\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}
-
-The setters and getters in this module were excluded because they do not 
-involve any calculations.
-
-\hz{fix labels of test cases in system plan and use cross-ref here} 
-
-\subsubsection{Tableau Module}
-
-The tableau module is responsible for operations related to the simplex 
-tableau, such as setting it up, updating its values and converting the tableau 
-to the canonical form. 
-
-Since the conversion includes the execution of most of the module's access 
-programs (found in the MIS document \cite{losms-mis}), the following test cases 
-were selected to test each possible case in toCanonical() - which helps 
-achieving branch coverage.
-
-In addition, a test case was selected for updateTableau() to cover the case 
-when negating the objective function is needed.
-
-The module's constructor (access program \textit{TableauT} in MIS), setters 
-and getters were excluded from this section because they do not include 
-calculations.
-
-\begin{enumerate}
-		
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{canonicalMax}: 
-	Test canonical form conversion for maximization problems with less than or 
-	equal to inequalities}}
-		
-	Control: Automatic 
-		
-	Initial State: sTableau = $\begin{bmatrix}
-	-2 & 3 & -1 & 1 & 0\\
-	1 & 1 & 1 & 0 & 10\\
-	4 & -3 & 1 & 0 & 3\\
-	2 & 1 & -1 & 0 & 10\\
-	\end{bmatrix}$
-		
-	Input: -
-		
-	Output: No output, but the state changes to:
-	
-	sTableau = $\begin{bmatrix}
-	-2 & 3 & -1 & 1 & 0 & 0 & 0 & 0\\
-	1 & 1 & 1 & 0 & 1 & 0 & 0 & 10\\
-	4 & -3 & 1 & 0 & 0 & 1 & 0 & 3\\
-	2 & 1 & -1 & 0 & 0 & 0 & 1 & 10\\
-	\end{bmatrix}$
-	
-	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
-		
-	How test will be performed: PyTest and/or Mock
-	
-	\hz{Explanation: Since the linear constraints are less than or equal to 
-	(from calling getLCsType()), the slack variables are added to the
-        matrix} \\
-
-      \wss{I like your explanations; they add to the document.  Unfortunately
-        they will disappear when the comments are turned off.  I suggest that
-        you move this information out of the comment and into the document.  You
-        might even keep the heading explanation and add it to your template.}
-
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{canonicalSlack}: 
-	Test canonical form conversion for less than or equal to inequalities: 
-	adding slack variables}}
-	
-	Control: Automatic 
-	
-	Initial State: sTableau = $\begin{bmatrix}
-	2 & -3 & 1 & 0\\
-	3 & 4 & 0 & 24\\
-	7 & 4 & 0 & 16\\
-	\end{bmatrix}$
-	
-	Input: -
-	
-	Output: No output, but the state changes to:
-	
-	sTableau = $\begin{bmatrix}
-	-2 & 3 & -1 & 0 & 0 & 0\\
-	3 & 4 & 0 & 1 & 0 & 24\\
-	7 & 4 & 0 & 0 & 1 & 16\\
-	\end{bmatrix}$
-	
-	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
-	
-	How test will be performed: PyTest and/or Mock
-	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{canonicalMin}: 
-	Test canonical form conversion for minimization problems: the transition of 
-	\textit{wasMin}}}
-	
-	Control: Automatic 
-	
-	Initial State: wasMin = False
-	
-	Input: -
-	
-	Output: No output, but the state changes to:
-	
-	wasMin = True
-	
-	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
-	
-	How test will be performed: PyTest and/or Mock
-	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum 
-	\label{updateTableauNeg}: Test updateTableau() for negating the objective 
-	function}}
-	
-	Control: Automatic 
-	
-	Initial State: sTableau = $\begin{bmatrix}
-	2 & -3 & 1 & 0\\
-	3 & 4 & 0 & 24\\
-	7 & 4 & 0 & 16\\
-	\end{bmatrix}$
-	
-	Input: 0
-	
-	Output: No output, but the state changes to:
-	
-	sTableau = $\begin{bmatrix}
-	-2 & 3 & -1 & 0 & 0 & 0\\
-	3 & 4 & 0 & 1 & 0 & 24\\
-	7 & 4 & 0 & 0 & 1 & 16\\
-	\end{bmatrix}$
-	
-	Test Case Derivation: Section \ref{M_Tableau} in the MIS (\cite{losms-mis})
-	
-	How test will be performed: PyTest and/or Mock
-	
-	\hz{Explanation: T1 and T2 are also tests for updateTableau(), since the 
-	conversion to the canonical form cannot be done without updating the 
-	tableau. Since they don't cover if updateTableau() was called for 
-	converting maximization to minimization (negating the first row in the 
-	tableau), I added T3 to test that case.}
-
-\end{enumerate}
-
 \subsubsection{Simplex Solver Module}
 
-The simplex solver module is responsible for performing the simplex method 
-steps to calculate the optimum and the points where it occurs.
+The simplex solver module is the main module of the library. It receives the 
+inputs from the driver program and performs the calculations necessary to 
+obtain the optimal solution of the linear program.\\
 
-The following test cases were selected to cover the cases for solving 
-minimization and maximization problems. The module's setters and getters were 
-excluded from this section because they do not include calculations.
+Testing for faulty inputs is detailed in the System V\&V Plan 
+(T\ref{NoObjcFunc} \& T\ref{NoLCs}) found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}\\
+
+As previously explained in Section \ref{Scope}, the focus of the test cases in 
+this document will be on \textit{solveLP()}. The following test cases were 
+selected to test each possible case that can occur in the function execution.
 
 \begin{enumerate}
 	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMinZ}: 
-	Test solveLP() for minimization problems: value of $Z$}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMax1}: 
+	First Test for solveLP() for maximization problems}}
 
 	Control: Automatic
 	
-	Initial State: Z = [ ]
+	Initial State: -
 	
-	Input: 	$\begin{bmatrix}
-	2 & -3 & 1 & 0 & 0 & 0\\
-	3 & 4 & 0 & 1 & 0 & 24\\
-	7 & 4 & 0 & 0 & 1 & 16\\
-	\end{bmatrix}$ , True 
+	Input: LCs = [[20,6,3],[0,1,0],[-1,-1,1],[-9,1,1]], Constants = 
+	[182,10,0,0], ObjcFunc = [100000,40000,18000], Goal = max
 	
-	Output: No output, but the state changes to:
-	
-	Z = [-4.57]
-	
-	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
+	Output: $Z$ = 1052000, $x_1$ = 4, $x_2$ = 10, $x_3$ = 14
+	 	
+	Test Case Derivation: Section \ref{M_SimplexSolver} in the MIS 
 	(\cite{losms-mis})
 	
-	How test will be performed: PyTest and/or Mock
-	
-	Note: Since this test case includes the comparison of floats and they're 
-	usually not exactly equal, the function \textit{math.isclose()} that Python 
-	3 provides will be used. By using this function, a small difference between 
-	the two floats being compared will be allowed. (Source: \cite{python3-doc}).
-	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMinK}: 
-			Test solveLP() for minimization problems: value of $K$}}
+	How test will be performed: Unittest
+
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMax2}: 
+			Second Test for solveLP() for maximization problems}}
 	
 	Control: Automatic
 	
-	Initial State: K = [ ]
+	Initial State: -
 	
-	Input: 	$\begin{bmatrix}
-	2 & -3 & 1 & 0 & 0 & 0\\
-	3 & 4 & 0 & 1 & 0 & 24\\
-	7 & 4 & 0 & 0 & 1 & 16\\
-	\end{bmatrix}$ , True 
+	Input: LCs = [[3,2],[1,0],[0,1],[-9,1,1]], Constants = [182,40,60], 
+	ObjcFunc = [3,2], Goal = max
 	
-	Output: No output, but the state changes to:
+	Output: $Z$ = 180, $x_1$ = 40, $x_2$ = 30
 	
-	K = [2.29 , 0]
-	
-	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
+	Test Case Derivation: Section \ref{M_SimplexSolver} in the MIS 
 	(\cite{losms-mis})
 	
-	How test will be performed: PyTest and/or Mock
+	How test will be performed: Unittest
 	
-	Note: Since this test case includes the comparison of floats and they're 
-	usually not exactly equal, the function \textit{math.isclose()} that Python 
-	3 provides will be used. By using this function, a small difference between 
-	the two floats being compared will be allowed. (Source: \cite{python3-doc}).
-	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMaxZ}: 
-	Test solveLP() for maximization problems: value of $Z$}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMin}: Test 
+	solveLP() for minimization problem with no optimal solution}}
 	
 	Control: Automatic
 	
-	Initial State: Z = [ ]
+	Initial State: -
 	
-	Input: 	$\begin{bmatrix}
-	-2 & 3 & -1 & 1 & 0 & 0 & 0 & 0\\
-	1 & 1 & 1 & 0 & 1 & 0 & 0 & 10\\
-	4 & -3 & 1 & 0 & 0 & 1 & 0 & 3\\
-	2 & 1 & -1 & 0 & 0 & 0 & 1 & 10\\
-	\end{bmatrix}$ , False 
+	Input: LCs = [[400,300],[300,400],[200,500]], Constants = 
+	[25000,27000,30000], ObjcFunc = [11,16,15], Goal = min
 	
-	Output: No output, but the state changes to:
+	Output: Exception message: ``This linear program does not have an optimal 
+	solution''
 	
-	Z = [3]
-	
-	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
+	Test Case Derivation: Section \ref{M_SimplexSolver} in the MIS 
 	(\cite{losms-mis})
 	
-	How test will be performed: PyTest and/or Mock
-	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpMaxK}: 
-	Test solveLP() for maximization problems: value of $K$}}
-	
-	Control: Automatic
-	
-	Initial State: K = [ ]
-	
-	Input: 	$\begin{bmatrix}
-	-2 & 3 & -1 & 1 & 0 & 0 & 0 & 0\\
-	1 & 1 & 1 & 0 & 1 & 0 & 0 & 10\\
-	4 & -3 & 1 & 0 & 0 & 1 & 0 & 3\\
-	2 & 1 & -1 & 0 & 0 & 0 & 1 & 10\\
-	\end{bmatrix}$ , False 
-	
-	Output: No output, but the state changes to:
-	
-	K = [0, 0, 3]
-	
-	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
-	(\cite{losms-mis})
-	
-	How test will be performed: PyTest and/or Mock
-	
-	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{solveLpNoSol}: 
-	Test solveLP() for a problem with no optimal solution}}
-	
-	Control: Automatic
-	
-	Initial State: Z = [ ], K = [ ]
-	
-	Input: 	$\begin{bmatrix}
-	-2 & -1 & 1 & 0 & 0 & 0\\
-	1 & -1 & 0 & 1 & 0 & 10\\
-	2 & -1 & 0 & 0 & 1 & 40\\
-	\end{bmatrix}$ , False 
-	
-	Output: Exception (``This linear program does not have an optimal 
-	solution'')
-	
-	Test Case Derivation: Section \ref{M_simplexSolver} in the MIS 
-	(\cite{losms-mis})
-	
-	How test will be performed: PyTest and/or Mock
-		
+	How test will be performed: Unittest
 \end{enumerate}
+
+\wss{I like your explanations; they add to the document.  Unfortunately
+	they will disappear when the comments are turned off.  I suggest that
+	you move this information out of the comment and into the document.  You
+	might even keep the heading explanation and add it to your template.}
+
+\subsubsection{Explanation}
+
+The function \textit{solveLP()} receives 4 inputs in the following order:
+\begin{enumerate}
+	\item The coefficients of the linear constraints (LCs) in the form of a 
+	2-dimentional array
+	\item The constants (const) in the linear constraints, such that: Ax $\leq$ 
+	const
+	\item The coefficients of the objective function (ObjcFunc)
+	\item The linear program goal (max or min)
+\end{enumerate}
+
+Most of the test cases for the library are system tests (detailed in the System 
+V\&V Plan). The test cases in this document are added to ensure a high test 
+coverage.
 
 \subsection{Tests for Nonfunctional Requirements}
 
-The test cases T11-T15 in section \ref{NonFunctionalTests} in the System V\&V 
-Plan cover the non-functional requirements (qualities) that are important for 
-\famname{}. The document can be found at: 
-\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}
+The test cases T\ref{Usability}-T\ref{Stability} in section 
+\ref{NonFunctionalTests} in the System V\&V Plan cover the non-functional 
+requirements (qualities) that are important for \famname{}. The document can be 
+found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}.
+
+\subsection{Code Coverage}
+\hz{Sorry for changing the template.. but I wanted to add a section for code 
+	coverage because it is planned for \famname{}.}
+
+It is planned to verify the code coverage that the test cases for \famname{} 
+achieves. The aim is to reach a minimum of 99\% code coverage. In the case of a 
+lower percentage, more test cases would be added for the parts of the 
+implementation that weren't covered. \\
+
+As explained at the beginning of this document, Python's Coverage.py will be 
+used to verify the code coverage. It provides a table with the coverage 
+percentage along with a detailed view on the parts of the implementation that 
+were and weren't covered.
 
 \subsection{Traceability Between Test Cases and Modules}
 
@@ -443,15 +278,11 @@ Plan cover the non-functional requirements (qualities) that are important for
 		\hline	
 		\textbf{Test Case Number} & \textbf{Module}\\
 		\hline 
-		T6-T9 in System V\&V Plan& Input Module\\ \hline
-		\tref{canonicalMax}& Tableau Module\\ \hline
-		\tref{canonicalSlack}& Tableau Module\\ \hline
-		\tref{canonicalMin}& Tableau Module\\ \hline
-		\tref{updateTableauNeg}& Tableau Module\\ \hline
-		\tref{solveLpMinZ}& Simplex Solver Module\\ \hline
-		\tref{solveLpMinK}& Simplex Solver Module\\ \hline
-		\tref{solveLpMaxZ}& Simplex Solver Module\\ \hline
-		\tref{solveLpMaxK}& Simplex Solver Module\\ \hline
+		T\ref{NoObjcFunc} \& T\ref{NoLCs} in System V\&V Plan& Simplex Solver 
+		Module\\ \hline
+		\tref{solveLpMax1}& Simplex Method Solver Module\\ \hline
+		\tref{solveLpMax2}& Simplex Method Solver Module\\ \hline
+		\tref{solveLpMin}& Simplex Solver Module, Exceptions Module\\ \hline
 	\end{tabular}
 	\caption{Traceability Between Test Cases and Modules}
 	\label{Table:Traceability} 
