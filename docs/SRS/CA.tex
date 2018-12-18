@@ -88,8 +88,8 @@
 
 \begin{document}
 
-\title{Commonality Analysis of a Library of Simplex Method Solvers \wss{Put the
-    name of your library in the title}} 
+\title{Commonality Analysis of a Library of Simplex Method Solvers (\famname{}) 
+\wss{Put the name of your library in the title}\hz{done}} 
 \author{Hanane Zlitni}
 \date{October 4, 2018}
 
@@ -104,8 +104,11 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 	\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 	\midrule
-	October 13, 2018 & 1.1 & Applied most of the comments obtained from 
-	Jennifer Garner's review\\
+	December 17, 2018 & 2.0 & Final Draft (includes making the document 
+	consistent with the rest of the deliverables)\\
+	December 16, 2018 & 1.2 & Applied Dr.~Smith’s Comments\\
+	October 13, 2018 & 1.1 & Applied the comments obtained from Jennifer 
+	Garner's review\\
 	October 4, 2018 & 1.0 & First Draft\\
 	\bottomrule
 \end{tabularx}
@@ -157,6 +160,7 @@ The table that follows summarizes the symbols used in this document.
   \famname{} & Library of Simplex Method Solvers\\
   T & Theoretical Model\\
   $s.\;t.$ & Subject to\\
+  2D & 2 Dimentional \\
   \bottomrule
 \end{tabular}\\
 
@@ -164,18 +168,26 @@ The table that follows summarizes the symbols used in this document.
 
 \tableofcontents
 
+\listoftables
+
+\listoffigures
+
 ~\newpage
 
 \pagenumbering{arabic}
 
 \section{Introduction}
 
-The simplex method, a linear programming algorithm, is considered one of the 
-most popular algorithms that has significant influence in the fields of science 
-and engineering (\cite{simplex-popularity}). 
+Linear programming is a method to achieve the best possible outcome in a 
+mathematical model which is represented by linear relationships. It can also be 
+called ``Linear Optimization''.
+
+The simplex method is a linear programming algorithm that is considered one of 
+the most popular algorithms which has significant influence in the fields of 
+science and engineering (\cite{simplex-popularity}).
 
 \wss{In your introduction it would be nice to say what linear programming
-  actually is.}
+  actually is.}\hz{done.}
 
 The algorithm can be used in a variety of fields and its goal is to make the 
 most of the available resources to achieve the optimal solution. For example, 
@@ -186,7 +198,7 @@ reaction (\cite{chemistry}).
 
 Since the simplex method has various applications in different fields, a 
 software that facilitates solving objective functions using the simplex method 
-for different purposes can be useful. 
+for different purposes can be useful.
 
 This commonality analysis (CA) provides detailed documentation of a 
 general-purpose program family, called \famname{} (Library of Simplex Method 
@@ -250,42 +262,43 @@ constraints.
 \end{figure}
 
 \wss{Nice to see the drive program is interacting with your library, and not a
-  user.}
+  user.}\hz{thank you.}
 
 Figure~\ref{Figure_SystemContext} describes the system context of \famname{}. 
 The user inputs the correct data and \famname{} displays the output, if any.
 
 \begin{itemize}
-	\item User Responsibilities: \wss{Rather than user responsibilities, you
-            should probably discuss the calling programs responsibilities}
+	\item Driver Program Responsibilities: \wss{Rather than user 
+	responsibilities, you should probably discuss the calling programs 
+	responsibilities}\hz{done.}
 	\begin{itemize}
 		\item Input the objective function, linear constraints and the 
 		objective function goal.
+		\item Handle the case where an input is completely missing.
+		\item Handle the case where an input is entered in a wrong format.
 	\end{itemize}
 	\item \famname{} Responsibilities:
 	\begin{itemize}
-		\item Detect data type mismatch, such as a string of characters instead 
-		of a floating point number.
-		
-		\item Handle any errors occuring when the user enters the inputs, such 
-		as entering inputs in an incorrect format.
-		
-		\item Find and display the linear program's optimal solution(s) (if 
-		any).
+		\item Handle the case where an input is empty.
+		\item Find and display the optimal value of the objective function 
+		along with the points where that value occurs (the values of the 
+		decision variables), if any.
 	\end{itemize}
 \end{itemize}
 
 \wss{You say optimal solution, but it is unclear whether you mean the value of
   the optimal value of the objective function, or the optimal value and the
-  corresponding values of the decision variables.}
+  corresponding values of the decision variables.}\hz{I elaborated in the 
+  explanation.}
 
 \subsection{Potential User Characteristics} \label{SecUserCharacteristics}
 
 The end user of \famname{} should have basic knowledge of linear programming  
-which is typically given to year 3 undergraduate students.  \wss{A little more
-  information would be good here.  Undergraduate students in what programs?
-  What course subject would typically cover linear programming - operations
-  research? systems?}
+which is typically given in an operations research course to year 3 
+undergraduate students in Mathematics and in some Engineering programs like 
+Software Engineering.  \wss{A little more information would be good here.  
+Undergraduate students in what programs? What course subject would typically 
+cover linear programming - operations research? systems?}\hz{done.}
 
 \subsection{Potential System Constraints}
 
@@ -302,10 +315,19 @@ models.
 \famname{} is a program family that facilitates obtaining the optimal solution 
 of linear programs given the objective function and linear constraints. The 
 tool can be beneficial for users coming from various fields, including physics 
-and chemistry.
+and chemistry. \\
+
+The following figure visualizes the simplex method in a 2D graph:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{Simplex-description-en.png}
+	\caption{Simplex Method 2D Graph}
+	\label{FigSimplex}
+\end{figure}
 
 \wss{The background section would be a great place to show the ``classic'' 2D
-  picture of the simplex method.}
+  picture of the simplex method.}\hz{done}
 
 \subsection{Terminology and  Definitions}
 
@@ -331,6 +353,13 @@ easier to correctly understand the requirements:
 	\item Decision variables: They are variables that represent the parameters 
 	that the user wishes to optimize, and they are written as: ${x_1}$, 
 	${x_2}$, ..., ${x_k}$, where $k \in N$.
+	
+	\item Entering variable: An entering variable is the entry in the simplex 
+	tableau that becomes the pivot instead of a previous entry.
+	
+	\item Departing variable: A departing variable is the orevious entry in the 
+	simplex tableau that was the pivot and got replaced by the entering 
+	variable.
 	
 	\item Feasible solution: The point that satisfies all constraints and sign 
 	restrictions.
@@ -376,7 +405,8 @@ models. The dimension of each quantity is also given.
 	\end{tabular}
 \end{minipage}\\
 
-\wss{It is nice to see that IM2 actually does reference DD1.  Good!}
+\wss{It is nice to see that IM2 actually does reference DD1.  Good!}\hz{thank 
+you (:}
 
 ~\newline
 
@@ -391,9 +421,9 @@ models. The dimension of each quantity is also given.
 		\hline
 		Label& \bf The Simplex Tableau\\
 		\hline
-		Symbol & - \\
+		Symbol & sTableau \\
 		\hline
-		Equation& $\begin{bmatrix}
+		Equation& sTableau = $\begin{bmatrix}
 		a_{11} & a_{12} & a_{13} & a_{14} & \dots & b_{1}\\
 		a_{21} & a_{22} & a_{23} & a_{24} & \dots & b_{2}\\
 		\vdots & \vdots & \vdots & \vdots & \dots & \vdots\\
@@ -405,13 +435,14 @@ models. The dimension of each quantity is also given.
 		The simplex tableau is the augmented matrix form that \famname{} 
 		creates from the linear program's equations.\\
 		\hline
-		Sources& -\\
+		Sources& \cite{lp-book}\\
 		\hline
 		Ref.\ By & \iref{maxLP}\\
 		\hline
 	\end{tabular}
 \end{minipage}\\
-\wss{I feel like there should be a symbol for the tableau and a source.}
+\wss{I feel like there should be a symbol for the tableau and a 
+source.}\hz{done}
 ~\newline
 
 \noindent
@@ -432,8 +463,9 @@ models. The dimension of each quantity is also given.
 		\hline
 		Description & 
 		The slack variable is a variable that represents zero or a positive 
-		real number. It is added to less than or equal to inequalities so they 
-		become equalities.
+		real number. It is added to the simplex tableau to convert it to the 
+		canonical form (see \tref{T_SLPCF}). This can also be called an 
+		``artificial variable''.
 		\\
 		\hline
 		Sources& \cite{lp-defs}\\
@@ -450,13 +482,15 @@ function goal, the goal statement of \famname{} is:
 
 \begin{itemize}
 	\item[GS\refstepcounter{goalnum}\thegoalnum \label{goalStatement}:] Use the 
-	simplex method to find and display the objective function's optimal 
-	solution(s) satisfying all linear constraints and sign restrictions.
+	simplex method to find and output the optimal value of the objective 
+	function and the values of the decision variables satisfying all linear 
+	constraints and sign restrictions.
 \end{itemize}
 
 \wss{Rather than display the optimal solution, say ``output'' the optimal
-  solution.  This is a more abstract way to say it.} \wss{As mentioned
-  previously, you should be clear on what you mean by the optimal solution.}
+  solution.  This is a more abstract way to say it.}\hz{done} \wss{As mentioned
+  previously, you should be clear on what you mean by the optimal 
+  solution.}\hz{done}
 
 \subsection{Theoretical Models} \label{sec_theoretical}
 
@@ -471,99 +505,64 @@ on.
 	\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
 		\hline
 		\rowcolor[gray]{0.9}
-		Number& T\refstepcounter{theorynum}\thetheorynum \label{T_LPSF}\\
+		Number& T\refstepcounter{theorynum}\thetheorynum \label{T_SLPCF}\\
 	  	\hline
-	  	Label&\bf The Standard Form of a Linear Program\\
+	  	Label&\bf The Canonical Form of a Linear Program\\
 	  	\hline
-	  	Equation&\[
-		  \left\{ \begin{array}{c}
-		  max\;Z=\;\;\;c_{1}x_1 + c_{2}x_2 + ........ + c_{k}x_k \\ 
-		  s.\;t.\;\;\;\; a_{11}x_1 + a_{12}x_2 + ........ + 
-		  a_{1m}x_k\;{\leq}\;b_1 
-		  \\
-		  \hspace{1.3cm}\vdots \hspace{1.2cm}\vdots \hspace{2.6cm}\vdots 
-		  \hspace{1.5cm}\vdots \\
-		  \;\;\;\;\;\;\;\;\; a_{n1}x_1 + a_{n2}x_2 + ........ + 
-		  a_{nm}x_k\;{\leq}\;b_n 
-		  \\
-		  x_1, x_2 + ........ + x_k\;{\geq}\;0 \\
-		  \end{array}
-		  \right. 
-		  \] , where: $c, a, b \in R$ ; $k \in N$ ; $n$ = the row number ; $m$ 
-		  = the column number \wss{$a$ and $b$ should have the
-          subscripts.  Without the subscripts, they would not have the type
-          real, but multidimensional sequences of real.}\\
+	  	Equation& sTableau = $\begin{bmatrix}
+	  	a_{11} & a_{12} & a_{13} & a_{14} & \dots & b_{1}\\
+	  	a_{21} & a_{22} & a_{23} & a_{24} & \dots & b_{2}\\
+	  	\vdots & \vdots & \vdots & \vdots & \dots & \vdots\\
+	  	\vdots & \vdots & \vdots & \vdots & \dots & \vdots\\
+	  	a_{n1} & a_{n2} & a_{n3} & a_{n4} & \dots & b_{n}\\
+	  	c_{n1} & c_{n2} & c_{n3} & c_{n4} & \dots & 0\\
+	  	\end{bmatrix}$\newline
+	  	
+	  	, where: $a, b, c \in R$ ; $n$ = the row number ; the last row = the 
+	  	coefficients of the objective function ; the rest of the rows = the 
+	  	coeffiecients of the linear constraints \wss{$a$ and $b$ should have 
+	  	the subscripts.  Without the subscripts, they would not have the type 
+	  	real, but multidimensional sequences of real.}\hz{I don't really 
+        understand which subscripts should be added.}\\
 	  	\hline
-	  	Description & 
-	      A linear program is in its standard form when it satisfies the 
-	      following 
-	      conditions: \newline
+	  	Description & A linear program is in its canonical form when it 
+	  	satisfies the following conditions: \newline
 	      \begin{itemize}
 	      	\item The objective function is a maximization function
 	        
-	        \item All constraints are inequalities
+	        \item All constraints are equalities
 	        
 	        \item All decision variables are greater than or equal to zero.
-	      \end{itemize}\\
+	      \end{itemize}
+      	To convert a simplex tableau to the canonical form, slack variables 
+      	(see \ddref{slackVar}) must be added to the tableau.\\
 	  	\hline
 	  	Source & \cite{lp-defs}\\
 	  	\hline
-	  	Ref.\ By & \iref{maxLP}, \rref{R_StandardForm}\\
+	  	Ref.\ By & \iref{maxLP}, \rref{R_CanonicalForm}\\
 	  	\hline
 	\end{tabular}
 \end{minipage}\\
 
 \wss{The names of functions, like max, should not be in italic font.  You can
   use the following \LaTeX code to change fonts inside an equation: $\text{max }
-  Z = ...$} \wss{Isn't $Z$ usually in lower case in this formula?}
+  Z = ...$}\hz{done.} \wss{Isn't $Z$ usually in lower case in this 
+  formula?}\hz{I saw that both upper and lower cases are used online and in 
+  text books. I used the upper case because that's what I'm used to when I 
+  studied operations research.}
 
 \wss{Do you want to consider using matrix notation for these equations?  I guess
   it depends on how many times you need the equation.  If you are using it
-  frequently, the more succinct matrix notation would help.}
+  frequently, the more succinct matrix notation would help.}\hz{You're right, 
+  the matrix notation is much better. I will change all occurences of the 
+  equations to the matrix form.}
 
-~\newline
+\wss{Isn't this where you want to mention slack variables?}\hz{done.}
 
-\noindent
-\begin{minipage}{\textwidth}
-	\renewcommand*{\arraystretch}{1.5}
-	\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-		\hline
-		\rowcolor[gray]{0.9}
-		Number& T\refstepcounter{theorynum}\thetheorynum \label{T_SLPCF}\\
-		\hline
-		Label&\bf The Canonical Form of a Standard Linear Program\\
-		\hline
-		Equation&\[
-		\left\{ 
-		\begin{array}{c}
-		max\;Z=\;\;\;c_{1}x_1 + c_{2}x_2 + ........ + c_{k}x_k \\ 
-		s.\;t.\;\;\;\; a_{11}x_1 + a_{12}x_2 + ........ + 
-		a_{1m}x_k\;=\;b_1 \\
-		\hspace{1.3cm}\vdots \hspace{1.2cm}\vdots 
-		\hspace{2.6cm}\vdots \hspace{1.5cm}\vdots \\
-		\;\;\;\;\;\;\;\;\; a_{n1}x_1 + a_{n2}x_2 + ........ + 
-		a_{nm}x_k\;=\;b_n \\
-		x_1, x_2 + ........ + x_k\;{\geq}\;0 \\
-		\end{array}
-		\right. 
-		\] , where: $c, a, b \in R$ ; $k \in N$ ; $n$ = the row number ; $m$ 
-		= the column number\\
-		\hline
-		Description & 
-		A standard linear program is in its canonical form when it satisfies 
-		the conditions in \tref{T_LPSF}, except: \newline
-		\begin{itemize}
-			\item The constraints must be equality constraints and not 
-			inequalities
-		\end{itemize}\\
-		\hline
-		Source & \cite{lp-defs}\\
-		\hline
-		Ref.\ By & \iref{maxLP}, \rref{R_CanonicalForm}\\
-		\hline
-	\end{tabular}
-\end{minipage}\\
-\wss{Isn't this where you want to mention slack variables?}
+\hz{Note: Instead of having two theoretical models for the standard and 
+canonical forms, I merged them into one under the name of canonical form 
+because I noticed that they aren't differentiated online and in text books. So 
+I thought that there's no need to do that here.}
 
 ~\newline
 
@@ -595,11 +594,18 @@ on.
 		\end{itemize} \\
 		\hline
 		Description & 
-		Pivoting in an augmented matrix consists of a series of row operations 
-		that are done to clear a column in the matrix (set elements of the 
-		column to zero).\\
+		Pivoting is the process of performing what's similar to Gaussian 
+		elimination with row operations to clear the entries of the pivot 
+		column (set them to 0).\newline
+		
+		The element that performs the pivoting operation is called the 
+		``pivot''. It is determined by finding the minimum ratio between the 
+		entries in the pivot column and the ones in the same row in the 
+		constants column (the last column). This is done to ``guarantee that 
+		the new basis obtained after the pivot step will also be a feasible 
+		basis''.\\
 		\hline
-		Source & -\\
+		Source & \cite{lp-book}\\
 		\hline
 		Ref.\ By & \iref{maxLP}\\
 		\hline
@@ -607,7 +613,8 @@ on.
 \end{minipage}\\
 
 \wss{The information on T3 doesn't actually tell me what pivoting is.  You have
-  just defined elementary row operations, not why you would do them.}
+  just defined elementary row operations, not why you would do them.}\hz{That's 
+  true. I added an explanation for the actually pivoting process. Thank you.}
 
 \section{Variabilities} \label{Sec_Variabilities} 
 
@@ -643,9 +650,10 @@ mathematical terms.
 			\newline$x_1, ..., x_k\;{\geq}\;0$
 		\end{enumerate} , where: $c, a, b \in R$ ; $k, n, m \in N$\\
 		\hline
-		Output& The optimal solution $Z$ \wss{I'm surprised you just
-                        want $Z$.  Don't you also want the $x_i$ values that
-                        give you $Z$?}\\
+		Output& The optimal solution $Z$ and the points $x_i$ where $Z$ occurs 
+		(the values of the decision variables) \wss{I'm surprised you 
+		just want $Z$.  Don't you also want the $x_i$ values that give you 
+		$Z$?}\hz{Yes. I added it.}\\
 		\hline
 		Description& The purpose of this instance model is to provide details 
 		about solving linear programs that intend to maximize a parameter. The 
@@ -670,7 +678,8 @@ mathematical terms.
 		\hline
 		Sources& \cite{lp-defs}\\
 		\hline
-		Ref.\ By & \iref{minLP}, \calcref{calculation}, \rref{R_Calculate}\\
+		Ref.\ By & \iref{minLP}, Section \ref{sec_Calculation}, 
+		\rref{R_Calculate}\\
 		\hline
 	\end{tabular}
 \end{minipage}\\
@@ -698,7 +707,8 @@ mathematical terms.
 			\newline$x_1, ..., x_k\;{\geq}\;0$
 		\end{enumerate} , where: $c, a, b \in R$ ; $k, n, m \in N$\\
 		\hline
-		Output& The optimal solution $Z$\\
+		Output& The optimal solution $Z$ and the points $x_i$ where $Z$ occurs 
+		(the values of the decision variables)\\
 		\hline
 		Description& The purpose of this instance model is to provide details 
 		about solving linear programs that intend to minimize a parameter. The 
@@ -713,7 +723,7 @@ mathematical terms.
 		\hline
 		Sources& \cite{lp-defs}\\
 		\hline
-		Ref.\ By & \calcref{calculation}, \rref{R_Calculate} \\
+		Ref.\ By & Section \ref{sec_Calculation}, \rref{R_Calculate} \\
 		\hline
 	\end{tabular}
 \end{minipage}\\
@@ -722,7 +732,7 @@ mathematical terms.
   where the number of equations are fixed at design time.  This information
   could be hard-coded into a family member.  I don't think you need to add this
   now, but you could clarify that the size variabilities are all left to
-  run-time.}
+  run-time.}\hz{clarified in 6.3.}
 
 \wss{You could have mentioned the ``covering'' variation (see the Wikipedia page
   for Linear Programming.}
@@ -740,32 +750,45 @@ mathematical terms.
 	\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_inequalities}:] If 
 	the linear constraints are inequalities, they are of type less than or 
 	equal to. This is to ensure that there are no negative variables.
+	
+	\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_NonNegative}:] It 
+	is assumed that all linear programs have the non-negativity constraint 
+	(i.e. the decision variables are greater than 0), even if the 
+	non-negativity constraint is not present in a linear program.
+	
+	\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_GoalMax}:] The 
+	default linear program goal is maximization.
 \end{itemize}
 
 \subsection{Calculation} \label{sec_Calculation}
 
-\begin{itemize}
-	\item[C\refstepcounter{calcnum}\thecalcnum \label{calculation}:] Solve 
-	\iref{maxLP} for maximization problems and \iref{minLP} for minimization 
-	problems.
-\end{itemize}
+\famname{} has some variabilities in its calculations. For instance, 
+\iref{maxLP} is solved when the linear program is a maximization problem, while 
+\iref{minLP} is solved when the linear program is a minimization 
+problem. \\
+
+Moreover, the size of the linear program (i.e. the number of linear 
+constraints and decision variables) varies and it is left to be determined at 
+run-time.
 
 \wss{It would be better if you phrased these as variabilities.  You could also
-  have mentioned the variabilities I mentioned above.}
+  have mentioned the variabilities I mentioned above.}\hz{done.}
 
 \subsection{Output} \label{sec_Output}
 
-All variabilities have the same output. For example, the following inputs:\\
-$max\;Z = 3x_1 + 4x_2$\\ \hspace{10mm}
-\indent $s.\;t.\;\;x_1 + x_2\;\leq\;4$\\
-\indent \indent $2x_1 + x_2\;\leq\;5$\\
-\indent \indent $x_1, x_2\;\geq\;0$\\
-yield the output: $Z = 16$, which is the optimal solution.
+Similar to its calculations, \famname{} has variabilities in its output, as 
+well. The library currently outputs the optimal solution $Z$ and the values of 
+the decision variables $x_i$. However, with a small change, the library can 
+just output $Z$ or $x_i$, depending on what's desired. Furthermore, the format 
+of the output varies. The library can output the solution to the screen and 
+write it to a file. It can also be expanded in the future to accomodate more 
+output format options.
 
 \wss{You have more output variabilities than this.  You have the decision on
   whether the output includes the $x$ values, or not.  You could output to the
   screen, or to a file, or to memory.  The format of the output could be a
-  variability.}
+  variability.}\hz{I made changes to this section. Thank you for the 
+  clarification.}
 
 \section{Requirements} \label{Sec_Requirements}
 
@@ -789,24 +812,21 @@ qualities that the software is expected to exhibit.
 	there are invalid inputs, the \famname{} tool shall display a corresponding 
 	message to the user.
 	
-	\item[R\refstepcounter{reqnum}\thereqnum \label{R_StandardForm}:] The 
-	\famname{} tool shall convert the objective function to its standard form 
-	(\tref{T_LPSF}).
-	
 	\item[R\refstepcounter{reqnum}\thereqnum \label{R_CanonicalForm}:] The 
-	\famname{} tool shall convert the standard objective function to its 
-	canonical form (\tref{T_SLPCF}).
+	\famname{} tool shall convert the linear program to its canonical form 
+	(\tref{T_SLPCF}).
 
 	\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] The 
-	\famname{} tool shall find the optimal solution(s) of the linear program by 
-	solving \iref{maxLP} or \iref{minLP}, depending on the objective function 
-	goal.
+	\famname{} tool shall find the optimal solution of the linear program and 
+	the points where it occurs by solving \iref{maxLP} or \iref{minLP}, 
+	depending on the objective function goal.
 	
 	\item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:] The \famname{} 
-	tool shall display the optimal solution(s) to the user, if any.
+	tool shall display the optimal solution and the points where it occurs to 
+	the user, if any.
 	
 	\item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputError}:] If the 
-	given linear program does not have any optimal solutions, the \famname{} 
+	given linear program does not have an optimal solution, the \famname{} 
 	tool shall display a corresponding message to the user.
 \end{itemize}
 
@@ -816,23 +836,48 @@ qualities that the software is expected to exhibit.
 
 \noindent 
 \begin{itemize}
-	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{usability}:] It shall 
+	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{NFR_usability}:] It 
+	shall 
 	take at most 10 minutes for the user to learn to use the \famname{} tool.
-\end{itemize}
-
-\subsubsection*{Robustness}
-
-\begin{itemize}
-	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{robustness}:] If the 
-	\famname{} tool encounters an unexpected behavior, the tool shall display 
-	a corresponding message to the user in no longer than 2 minutes.
 \end{itemize}
 
 \subsubsection*{Portability}
 
 \begin{itemize}
-	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{portability}:] The 
-	\famname{} tool shall be operable in at least Windows and Mac platforms.
+	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{NFR_portability}:] 
+	The 
+	\famname{} tool shall be operable in Windows, Mac and Linux operating 
+	systems.
+\end{itemize}
+
+\subsubsection*{Accuracy}
+
+\begin{itemize}
+	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{NFR_accuracy}:] The 
+	relative error of the output of the \famname{} tool shall be less than 
+	0.2. 
+\end{itemize}
+
+\subsubsection*{Correctness}
+
+\begin{itemize}
+	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{NFR_correctness}:] 
+	The difference between the output of \famname{} and MatLab for the same 
+	linear program shall be less than 10\%.
+\end{itemize}
+
+\subsubsection*{Performance}
+
+\begin{itemize}
+	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{NFR_performance}:] It 
+	shall take no more than 3 seconds for \famname{} to calculate the solution.
+\end{itemize}
+
+\subsubsection*{Stability}
+
+\begin{itemize}
+	\item[NFR\refstepcounter{nfreqnum}\thenfreqnum \label{NFR_stability}:] The 
+	\famname{} tool shall handle a heavy load of inputs and not crash.
 \end{itemize}
 
 \section{Likely Changes} \label{Sec_LikelyChanges} 
@@ -843,9 +888,9 @@ qualities that the software is expected to exhibit.
 	support for greater than or equal to inequalities in the linear constraints.
 	
 	\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_moreAlgorithms}:] The 
-	support for additional linear programming algorithms.  \wss{You could
-          name some other algorithms, like the criss-cross algorithm, or
-          interior point methods.}
+	support for additional linear programming algorithms like the criss-cross 
+	and interior point algorithms. \wss{You could name some other algorithms, 
+	like the criss-cross algorithm, or interior point methods.}\hz{done}
 \end{itemize}
 
 \section{Traceability Matrices and Graphs} \label{Sec_TraceabilityMatrix}
@@ -862,31 +907,26 @@ assumptions and the calculation.
 	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
 		\hline        
 		& \ddref{minToMax} & \ddref{simplexTableau} & \ddref{slackVar} & 
-		\tref{T_LPSF} & \tref{T_SLPCF} & \tref{T_pivoting} & \iref{maxLP} & 
-		\iref{minLP} & \aref{A_objFunSpace} & \aref{A_inequalities} & 
-		\calcref{calculation} \\
+		\tref{T_SLPCF} & \tref{T_pivoting} & \iref{maxLP} & 
+		\iref{minLP} & \aref{A_objFunSpace} & \aref{A_inequalities} \\
 		\hline
-		\ddref{minToMax} 	    &   &   &   &   &   &   &   & X &   &   &  \\
+		\ddref{minToMax} 	    &   &   &   &   &   &   & X &   &  \\
 		\hline
-		\ddref{simplexTableau}  &   &   &   &   &   &   & X &   &   &   &  \\ 
+		\ddref{simplexTableau}  &   &   &   &   &   & X &   &   &  \\ 
 		\hline
-		\ddref{slackVar} 		&   &   &   &   &   &   & X &   &   &   &  \\ 
+		\ddref{slackVar} 		&   &   &   &   &   & X &   &   &  \\ 
 		\hline
-		\tref{T_LPSF} 		  	&   &   &   &   &   &   & X &   &   &   &  \\ 
-		\hline
-		\tref{T_SLPCF} 	  		&   &   &   &   &   &   & X &   &   &   &  \\ 
+		\tref{T_SLPCF} 	  		&   &   &   &   &   & X &   &   &  \\ 
 		\hline  
-		\tref{T_pivoting} 		&   &   &   &   &   &   & X &   &   &   &  \\ 
+		\tref{T_pivoting} 		&   &   &   &   &   & X &   &   &  \\ 
 		\hline
-		\iref{maxLP} 	  		&   &   &   &   &   &   &   & X &   &   & X\\ 
+		\iref{maxLP} 	  		&   &   &   &   &   &   & X &   &  \\ 
 		\hline
-		\iref{minLP}   			&   &   &   &   &   &   &   &   &   &   & X\\ 
+		\iref{minLP}   			&   &   &   &   &   &   &   &   &  \\ 
 		\hline
-		\aref{A_objFunSpace}	&   &   &   &   &   &   &   &   &   &   &  \\
+		\aref{A_objFunSpace}	&   &   &   &   &   &   &   &   &  \\
 		\hline 
-		\aref{A_inequalities} 	&   &   &   &   &   &   & X &   &   &   &  \\
-		\hline
-		\calcref{calculation} 	&   &   &   &   &   &   &   &   &   &   & \\
+		\aref{A_inequalities} 	&   &   &   &   &   & X &   &   &  \\
 		\hline
 	\end{tabular}
 	\caption{Traceability Matrix Showing the Dependencies between Components of 
