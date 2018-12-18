@@ -1,5 +1,6 @@
 \documentclass[12pt, titlepage]{article}
 
+\usepackage{xr}
 \usepackage{placeins}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -13,16 +14,21 @@
 }
 \usepackage[round]{natbib}
 
-
+\newcounter{testnum} %Test Number
+\newcommand{\dthetestnum}{T\thetestnum}
+\newcommand{\tref}[1]{T\ref{#1}}
 
 \input{../../Comments}
 
-\newcommand{\famname}{LoSMS} % PUT YOUR PROGRAM NAME %HERE
+\externaldocument{../../SRS/CA}
+
+\newcommand{\progname}{Library of Simplex Method Solvers}
+\newcommand{\famname}{LoSMS}
 
 \begin{document}
 
-\title{A Library of Simplex Method Solvers: System Verification and Validation 
-Plan \wss{put your library name in the title}} 
+\title{System Verification and Validation Plan of a Library of Simplex Method 
+Solvers (\famname{}) \wss{put your library name in the title}\hz{done}}
 \author{Hanane Zlitni}
 \date{October 22, 2018}
 	
@@ -35,6 +41,11 @@ Plan \wss{put your library name in the title}}
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+December 17, 2018 & 2.0 & Final Draft (includes making the document consistent 
+with the rest of the deliverables)\\
+December 16, 2018 & 1.2 & Applied Dr.~Smith’s Comments\\
+December 06, 2018 & 1.1 & Applied Brooks MacLachlan’s Comments Posted on 
+GitHub\\
 October 22, 2018 & 1.0 & First Draft\\
 \bottomrule
 \end{tabularx}
@@ -67,22 +78,18 @@ October 22, 2018 & 1.0 & First Draft\\
 
 \listoftables
 
-\listoffigures
-
-\wss{if you don't have any figures, you can comment out this heading}
-
 \newpage
 
 \pagenumbering{arabic}
 
 This document describes the system verification and validation (V\&V) plan for
-the Library of Simplex Method Solvers (\famname{}) tool. \wss{I recently
-  modified the blank project template to put the (equivalent of) the famname
-  command in a common file, which can be shared between all your files.  You
-  might want to do the same.}  It is based on the tool's commonality analysis
-(CA) that can be found, along with the full documentation of \famname{}, in the
-following link: \url{https://github.com/hananezlitni/HZ-CAS741-Project}.
-\wss{nice to include this link}
+the \progname{} (\famname{}) tool. \wss{I recently modified the blank project 
+template to put the (equivalent of) the famname command in a common file, which 
+can be shared between all your files. You might want to do the same.}\hz{done} 
+It is based on the tool's commonality analysis (CA) that can be found, along 
+with the full documentation of \famname{}, at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project}.
+\wss{nice to include this link}\hz{thank you} \\
 
 The V\&V plan starts by providing general information about the tool and this 
 document in Section \ref{GeneralInfo}. Then, Section \ref{Plan} provides 
@@ -114,8 +121,10 @@ for the corresponding inputs), while providing satisfactory usability.
 
 \subsection{References}
 
-Different sections in this document refer to the tool's CA (\cite{losms-ca}).
-\wss{You should reference your SRS here.}
+Different sections in this document refer to the tool's CA which can be found 
+at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/SRS/CA.pdf}.
+\wss{You should reference your SRS here.}\hz{done}
 
 \section{Plan} \label{Plan}
 	
@@ -125,42 +134,46 @@ The verification and validation team consists of one member: Hanane Zlitni.
 
 \subsection{SRS Verification Plan}
 
-The CA for the \famname{} tool will be verified by getting feedback from Dr.
-Spencer Smith \wss{\LaTeX{} has a rule that it inserts two spaces at the end of
-  a sentence.  It detects a sentence as a period followed by a capital letter.
-  This comes up, for instance, with Dr. Smith.  Since the period after Dr.\
-  isn't actually the end of a sentence, you need to tell \LaTeX{} to insert one
-  space.  You do this either by Dr.\ Smith (if you don't mind a line-break
-  between Dr.\ and Smith), or Dr.~Spencer Smith (to force \LaTeX{} to not insert
-  a line break).} and my CAS 741 classmates which comes from formal reviews of
-the document.
+The CA for the \famname{} tool will be verified by getting feedback from 
+Dr.~Spencer Smith \wss{\LaTeX{} has a rule that it inserts two spaces at the 
+end of a sentence.  It detects a sentence as a period followed by a capital 
+letter. This comes up, for instance, with Dr. Smith.  Since the period after 
+Dr.\ isn't actually the end of a sentence, you need to tell \LaTeX{} to insert 
+one space.  You do this either by Dr.\ Smith (if you don't mind a line-break
+between Dr.\ and Smith), or Dr.~Spencer Smith (to force \LaTeX{} to not insert
+a line break).}\hz{done} and my CAS 741 classmates which comes from formal 
+reviews of the document. \\
 
-The feedback from Dr. Smith is expressed as comments written in the actual 
+The feedback from Dr.~Smith is expressed as comments written in the actual 
 document. The feedback from the CAS 741 students, on the other hand, is 
-expressed as issues posted in the project's GitHub repository. After getting 
-the comments, I apply them one by one and make changes in the document. \wss{You
-  could be more specific (using Repos.xlsx) on who exactly is going to review
-  your documentation.}
+expressed as issues posted in the project's GitHub repository. An Excel sheet 
+``Repos.xlsx'' present in the course's GitHub repository contains the names of 
+the reviewers for each documentation (Brooks MacLachlan for this document). 
+After getting the comments, I apply them one by one and make changes in the 
+document. \wss{You could be more specific (using Repos.xlsx) on who exactly is 
+going to review your documentation.}\hz{done}
 
 \subsection{Design Verification Plan}
 
 \famname{}'s design documents will be verified by getting feedback from 
-Dr. Spencer Smith and my CAS 741 classmates which comes from formal reviews of 
+Dr.~Spencer Smith and my CAS 741 classmates which comes from formal reviews of 
 the documents.
 
-The feedback from Dr. Smith is expressed as comments written in the documents, 
+The feedback from Dr.~Smith is expressed as comments written in the documents, 
 whereas the feedback from the CAS 741 students is expressed as issues posted in 
 the project's GitHub repository. After getting the comments, I apply them one 
 by one and make changes in the documents.
 
 \subsection{Implementation Verification Plan}
 
-The implementation of the \famname{} tool will be verified statically by 
-performing code review with Dr. Spencer Smith and my CAS 741 classmates (and 
-getting the comments in the form GitHub issues) and dynamically by executing 
-the test cases detailed in this plan and the unit V\&V plan using testing 
-frameworks (e.g. JUnit/PyUnit). Based on the comments/errors I get, the 
-implementation will be modified.
+The implementation of the \famname{} tool will be verified dynamically by 
+executing the test cases detailed in this plan and the Unit V\&V Plan using 
+testing frameworks (e.g. Python's unittest). Based on the errors I get, the 
+implementation will be modified. \\
+
+If the time permits, the implementation of the \famname{} tool will be 
+statically verified by performing code review with Dr.~Spencer Smith and my CAS 
+741 classmates using the GitHub issue tracker.
  
 \subsection{Software Validation Plan}
 
@@ -170,72 +183,73 @@ Not applicable for \famname{}.
 
 System testing for the \famname{} tool ensures that the correct inputs produce 
 the correct outputs. The test cases in this section are derived from the 
-instance models and the requirements detailed in the tool's CA.
+instance models and the requirements detailed in the tool's CA, found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/SRS/CA.pdf}.
 
 \subsection{Tests for Functional Requirements}
 
+This section contains the test cases related to the tool’s functional 
+requirements (e.g. handling input errors, calculating the solution and 
+producing the output). They are categorized based on the linear programming 
+problem goal (maximization and minimization). This section is based on the CA 
+which can be found at 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/SRS/CA.pdf}.
+
 \wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good.}
+  cover the requirements.  References to the SRS would be good.}\hz{done}
 
 \subsubsection{Tests for Solving Maximization Linear Programs}
 
+The following are the test cases related to solving maximization linear 
+programs. It covers both cases of having and not having an optimal solution. 
+This is based on the tool's CA which can be found at 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/SRS/CA.pdf}.
+
+\hz{Note: I excluded the case where there are multiple optimal solutions 
+because after many tries, I wasn't able to achieve this case in the code. I 
+wanted to include a paragraph about why I excluded it, but at this point in the 
+document I think we're still abstract and not thinking about the code yet.}
+
+
 \wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good.}
+  cover the requirements.  References to the SRS would be good.}\hz{done}
 
 \begin{enumerate}
-	\item{\textbf{T1: Unique Optimal Solution}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Max_Opt}: Optimal 
+	Solution}}
 	
 	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: $max\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$\\
+	Input: max$\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$\\
 	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\;+\;x_3\; \leq \;10$\\
 	$\hspace*{2cm} 4x_1\;-\;3x_2\;+\;x_3\; \leq \;3$\\
 	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
-	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
 	
-	Output: $Z = 3$, occurring when $x_1=0,\;x_2=0,\;x_3=3$
+	Output: $Z = 3$, $x_1=0,\;x_2=0,\;x_3=3$
 	
-	How test will be performed: Unit testing using JUnit/PyUnit
+	How test will be performed: Unit testing using Unittest
 	
 	Test Case Derivation: IM1 in \cite{losms-ca} \wss{good to have a field
           for test case derivation.  I might have to add that to the blank
-          template.  :-)}
+          template.  :-)}\hz{thank you (:}
 
-	\item{\textbf{T2: Multiple Optimal Solutions}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Max_NoOpt}: No 
+	Optimal Solution}}
 	
 	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: $max\;Z\;=\;3x_1\;+\;2x_2$\\
-	$s.\;t.$$\hspace*{1.3cm} 3x_1\;+\;2x_2\; \leq \;180$\\
-	$\hspace*{2cm} x_1\; \leq \;40$\\
-	$\hspace*{2cm} x_2\; \leq \;60$\\
-	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
-	
-	Output: $Z = 180$, occurring when $x_1=40,\;x_2=30$ \& $x_1=20,\;x_2=60$
-	
-	How test will be performed: Unit testing using JUnit/PyUnit
-	
-	Test Case Derivation: IM1 in \cite{losms-ca}
-
-	\item{\textbf{T3: No Optimal Solution}}
-	
-	Control: Automatic 
-	
-	Initial State: -
-	
-	Input: $max\;Z\;=\;2x_1\;+\;x_2$\\
+	Input: max$\;Z\;=\;2x_1\;+\;x_2$\\
 	$s.\;t.$$\hspace*{1.3cm} x_1\;-\;x_2\; \leq \;10$\\
 	$\hspace*{2cm} 2x_1\;-\;x_2\; \leq \;40$\\
-	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	Output: ``This linear program does not have an optimal solution'', or a 
-	corresponding exception
+	Output: Exception message: ``This linear program does not have an optimal 
+	solution''
 	
-	How test will be performed: Unit testing using JUnit/PyUnit
+	How test will be performed: Unit testing using Unittest
 	
 	Test Case Derivation: IM1 in \cite{losms-ca} and 
 	\cite{simplex-special-situations}
@@ -243,138 +257,94 @@ instance models and the requirements detailed in the tool's CA.
 
 \subsubsection{Tests for Solving Minimization Linear Programs}
 
+The following are the test cases related to solving minimization linear 
+programs. It covers both cases of having and not having an optimal solution. 
+This is based on the tool's CA which can be found at 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/SRS/CA.pdf}.
+
 \begin{enumerate}
-	\item{\textbf{T4: Unique Optimal Solution}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Min_Opt}: Optimal 
+	Solution}}
 	
 	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: $min\;Z\;=\;-2x_1\;+\;3x_2$\\
+	Input: min$\;Z\;=\;-2x_1\;+\;3x_2$\\
 	$s.\;t.$$\hspace*{1.3cm} 3x_1\;+\;4x_2\; \leq \;24$\\
 	$\hspace*{2cm} 7x_1\;+\;4x_2\; \leq \;16$\\
-	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	Output: $Z = -4.57$, occurring when $x_1=2.29,\;x_2=0$
+	Output: $Z = -4.5714$, $x_1=2.2857,\;x_2=0$
 	
-	How test will be performed: Unit testing using JUnit/PyUnit
+	How test will be performed: Unit testing using Unittest
 	
 	Test Case Derivation: IM2 in \cite{losms-ca}
 	
-	\item{\textbf{T5: No Optimal Solution}}
+	Note: Since this test case includes the comparison of floats and they're 
+	usually not exactly equal, the function \textit{math.isclose()} that Python 
+	3 provides will be used. By using this function, a small difference between 
+	the two floats being compared will be allowed. (Source: \cite{python3-doc}).
+	
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Min_NoOpt}: No 
+	Optimal Solution}}
 	
 	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: $min\;Z\;=\;3x_1\;+\;14x_2$\\
+	Input: min$\;Z\;=\;3x_1\;+\;14x_2$\\
 	$s.\;t.$$\hspace*{1.3cm} -x_1\;-\;5x_2\; \leq \;-6$\\
 	$\hspace*{2cm} -x_1\;-\;4x_2\; \leq \;-5$\\
 	$\hspace*{2cm} -x_1\;-\;3x_2\; \leq \;-4$\\
 	$\hspace*{2cm} -x_1\;-\;2x_2\; \leq \;-5$\\
 	$\hspace*{2cm} -x_1\;-\;x_2\; \leq \;-6$\\
-	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
 	
-	Output: ``This linear program does not have an optimal solution'', or a 
-	corresponding exception
+	Output: Exception message: ``This linear program does not have an optimal 
+	solution''
 	
-	How test will be performed: Unit testing using JUnit/PyUnit
+	How test will be performed: Unit testing using Unittest
 	
 	Test Case Derivation: IM2 in \cite{losms-ca}
 \end{enumerate}
 
 \subsubsection{Tests for Faulty Inputs} \label{TestInputs}
 
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good.  In this case,
-  you could reference any table of data constraints.}
+The following test cases verify that the received inputs are not empty. It is 
+based on the tool's CA found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/SRS/CA.pdf}.\\
 
 \begin{enumerate}
-	\item{\textbf{T6: No Objective Function}} \label{TestNoObjcFunc}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{NoObjcFunc}: No 
+	Objective Function}}
 	
-	Control: Automatic
+	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: $min $\\
-	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\;+\;x_3\; \leq \;10$\\
-	$\hspace*{2cm} 4x_1\;-\;3x_2\;+\;x_3\; \leq \;3$\\
-	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
-	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
+	Input: min \\
+	$s.\;t.$$\hspace*{1.3cm} 3x_1\;+\;4x_2\; \leq \;24$\\
+	$\hspace*{2cm} 7x_1\;+\;4x_2\; \leq \;16$
 	
-	Output: ``Error: No objective function'', or a corresponding exception
+	Output: Exception message: ``At least one input is missing''
 	
-	How test will be performed: Unit testing using JUnit/PyUnit
+	How test will be performed: Unit testing using Unittest
 	
 	Test Case Derivation: IM1 \& IM2 in \cite{losms-ca}
 	
-	\item{\textbf{T7: No Linear Constraints}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{NoLCs}: No 
+			Linear Constraints}}
 	
-	Control: Automatic
+	Control: Automatic 
 	
 	Initial State: -
 	
-	Input: $max\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$
+	Input: min$\;Z\;=\;-2x_1\;+\;3x_2$
 	
-	Output: ``Error: No linear constraints'', or a corresponding exception
+	Output: Exception message: ``At least one input is missing''
 	
-	How test will be performed: Unit testing using JUnit/PyUnit
+	How test will be performed: Unit testing using Unittest
 	
 	Test Case Derivation: IM1 \& IM2 in \cite{losms-ca}
-	
-	\item{\textbf{T8: No Objective Function Goal}}
-	
-	Control: Automatic
-	
-	Initial State: -
-	
-	Input: $\;Z\;=\;2x_1\;-\;3x_2\;+\;x_3$\\
-	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\;+\;x_3\; \leq \;10$\\
-	$\hspace*{2cm} 4x_1\;-\;3x_2\;+\;x_3\; \leq \;3$\\
-	$\hspace*{2cm} 2x_1\;+\;x_2\;-\;x_3\; \leq \;10$\\
-	$\hspace*{2cm} x_1\;,\;x_2\;,\;x_3\; \geq \;0$
-	
-	Output: ``Error: No objective function goal'', or a corresponding exception
-	
-	How test will be performed: Unit testing using JUnit/PyUnit
-	
-	Test Case Derivation: IM1 \& IM2 in \cite{losms-ca}
-	
-	\item{\textbf{T9: No Non-negativity Constraints/Negative Decision 
-	Variables}}
-	
-	Control: Automatic
-	
-	Initial State: -
-	
-	Input: $max\;Z\;=\;2x_1\;-\;3x_2$\\
-	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\; \leq \;5$\\
-	$\hspace*{2cm} 4x_1\;-\;3x_2\; \leq \;4$
-	
-	Output: ``Error: The decision variables must be positive'', or a 
-	corresponding exception
-	
-	How test will be performed: Unit testing using JUnit/PyUnit
-	
-	Test Case Derivation: Theoretical Model 1 in \cite{losms-ca}
-	
-	\item{\textbf{T10: Greater Than or Equal to Inequalities}}
-	
-	Control: Automatic
-	
-	Initial State: -
-	
-	Input: $max\;Z\;=\;2x_1\;-\;3x_2$\\
-	$s.\;t.$$\hspace*{1.3cm} x_1\;+\;x_2\; \leq \;5$\\
-	$\hspace*{2cm} 4x_1\;-\;3x_2\; \geq \;4$\\
-	$\hspace*{2cm} x_1\;,\;x_2\; \geq \;0$
-	
-	Output: ``Error: The inequalities of the main constraints must be of type 
-	less than or equal to'', or a corresponding exception
-	
-	How test will be performed: Unit testing using JUnit/PyUnit
-	
-	Test Case Derivation: A2 in \cite{losms-ca}
 \end{enumerate}
 
 \wss{Seems like good coverage.}
@@ -384,7 +354,8 @@ instance models and the requirements detailed in the tool's CA.
 \subsubsection{Usability}
 
 \begin{enumerate}
-	\item{\textbf{T11: Test for the Usability of \famname{}}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Usability}: Test 
+	for the Usability of \famname{}}}
 	
 	Type: Usability Testing
 						
@@ -394,18 +365,20 @@ instance models and the requirements detailed in the tool's CA.
 						
 	Output/Result: -
 						
-	How test will be performed: Asking participants to try the tool \wss{you
-          should clarify that you are going to make a tool using your library}
-        then answer the usability survey questions (see Appendix
-        \ref{UsabilityTesting}). The goal is to ensure that the library provided
-        the services the users requested and that they are satisfied with the
-        results obtained.
+	How test will be performed: For testing purposes, I will be implementing a 
+	command line handling tool that will use \famname{}. For the usability 
+	testing, I will be asking participants to try the tool \wss{you should 
+	clarify that you are going to make a tool using your library}\hz{done} then 
+	answer the usability survey questions (see Section \ref{UsabilityTesting}). 
+	The goal is to ensure that the library provided the services the users 
+	requested and that they are satisfied with the results obtained.
 \end{enumerate}
 
 \subsubsection{Portability}
 
 \begin{enumerate}
-	\item{\textbf{T12: Test for the Portability of \famname{}}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Portability}: 
+	Test for the Portability of \famname{}}}
 	
 	Type: Static
 	
@@ -422,7 +395,8 @@ instance models and the requirements detailed in the tool's CA.
 \subsubsection{Accuracy}
 
 \begin{enumerate}
-	\item{\textbf{T13: Test for the Accuracy of the Outputs}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Accuracy}: Test 
+	for the Accuracy of the Outputs}}
 
 	Type: Dynamic
 	
@@ -435,13 +409,13 @@ instance models and the requirements detailed in the tool's CA.
 	How test will be performed: I plan to report the relative error of the 
 	expected output for each test case detailed in this document
         \wss{great!}
-
 \end{enumerate}
 
-\subsubsection{Correctness \& Performance}
+\subsubsection{Correctness}
 
 \begin{enumerate}
-	\item{\textbf{T14: Test for the Correctness \& Performance of \famname{}}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Correctness}: 
+	Test for the Correctness of \famname{}}}
 	
 	Type: Parallel Testing
 	
@@ -452,15 +426,23 @@ instance models and the requirements detailed in the tool's CA.
 	Output/Result: -
 	
 	How test will be performed: I plan to make a comparison between \famname{} 
-	and MatLab to evaluate the correctness and performance of \famname{}
+	and MatLab to evaluate the correctness of \famname{}. The problem to be 
+	tested is:
+	
+	min$\;Z\;=\;-x_1\;-\;2x_2$\newline
+	$s.\;t.$$\hspace*{0.5cm} 2x_1\;+\;x_2\; = \;10$\newline
+	$\hspace*{1.2cm} x_1\;+\;x_2\; = \;6$\newline
+	$\hspace*{1.2cm} -x_1\;+\;x_2\; = \;2$\newline
+	$\hspace*{1.2cm} -2x_1\;+\;x_2\; = \;1$\newline
 \end{enumerate}
 
-\subsubsection{Stability}
+\subsubsection{Performance}
 
 \begin{enumerate}
-	\item{\textbf{T15: Test for the Stability of \famname{} Under Heavy Load}}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Performance}: 
+			Test for the Performance of \famname{}}}
 	
-	Type: Stress Testing
+	Type: Parallel Testing
 	
 	Initial State: -
 	
@@ -468,9 +450,38 @@ instance models and the requirements detailed in the tool's CA.
 	
 	Output/Result: -
 	
-	How test will be performed: Use the library to solve problems with great 
-	number of inputs and observe how it would behave \wss{You need to be
-          more specific.}
+	How test will be performed: I plan to make a comparison between \famname{} 
+	and MatLab to evaluate the performance of \famname{} by finding the time 
+	(in seconds) it took to solve a linear program. The problem to be tested is:
+
+	min$\;Z\;=\;-x_1\;-\;2x_2$\newline
+	$s.\;t.$$\hspace*{0.5cm} 2x_1\;+\;x_2\; = \;10$\newline
+	$\hspace*{1.2cm} x_1\;+\;x_2\; = \;6$\newline
+	$\hspace*{1.2cm} -x_1\;+\;x_2\; = \;2$\newline
+	$\hspace*{1.2cm} -2x_1\;+\;x_2\; = \;1$\newline
+\end{enumerate}
+
+\subsubsection{Stability}
+
+\begin{enumerate}
+	\item{\textbf{T\refstepcounter{testnum}\thetestnum \label{Stability}: Test 
+	for the Stability of \famname{} Under Heavy Load}}
+	
+	Type: Stress/Load Testing
+	
+	Initial State: -
+	
+	Input/Condition: -
+	
+	Output/Result: -
+	
+	How test will be performed: I plan to use a third-party tool that automates 
+	loading \famname{} with inputs so I can reach the greatest possible number 
+	of inputs (i.e.~hundreds). Specifically, I plan to increase the number 
+	of parameters in the objective function and the number of linear 
+	constraints to check the stability of the library. \wss{You need to be more 
+	specific.}\hz{done. I tried to be as specific as possible and answer the 
+	questions given by Brooks in the issue tracker.}
 
 \end{enumerate}
 
@@ -485,28 +496,36 @@ requirements.
 		\hline	
 		\textbf{Test Case Number} & \textbf{Requirements}\\
 		\hline 
-		T1& R1, R4, R5, R6, R7\\ \hline
-		T2& R1, R4, R5, R6, R7\\ \hline
-		T3& R1, R4, R5, R6, R8\\ \hline
-		T4& R1, R4, R5, R6, R7\\ \hline
-		T5& R1, R4, R5, R6, R8\\ \hline
-		T6& R1, R2, R3\\ \hline
-		T7& R1, R2, R3\\ \hline
-		T8& R1, R2, R3\\ \hline
-		T9& R1, R2, R3\\ \hline
-		T10& R1, R2, R3\\ \hline
+		T\ref{Max_Opt}& R\ref{R_Inputs}, R\ref{R_StandardForm}, 
+		R\ref{R_CanonicalForm}, R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{Max_NoOpt}& R\ref{R_Inputs}, R\ref{R_StandardForm}, 
+		R\ref{R_CanonicalForm}, R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{Min_Opt}& R\ref{R_Inputs}, R\ref{R_StandardForm}, 
+		R\ref{R_CanonicalForm}, R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{Min_NoOpt}& R\ref{R_Inputs}, R\ref{R_StandardForm}, 
+		R\ref{R_CanonicalForm}, R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{NoObjcFunc}& R\ref{R_Inputs}, R\ref{R_HandleInputErrors}, 
+		R\ref{R_DisplayErrorMsg}\\ \hline
+		T\ref{NoLCs}& R\ref{R_Inputs}, R\ref{R_HandleInputErrors}, 
+		R\ref{R_DisplayErrorMsg}\\ \hline
+		T\ref{Usability}& NFR\ref{NFR_usability}\\ \hline
+		T\ref{Portability}& NFR\ref{NFR_portability}\\ \hline
+		T\ref{Accuracy}& NFR\ref{NFR_accuracy}\\ \hline
+		T\ref{Correctness}& NFR\ref{NFR_correctness}\\ \hline
+		T\ref{Performance}& NFR\ref{NFR_performance}\\ \hline
+		T\ref{Stability}& NFR\ref{NFR_stability}\\ \hline
 	\end{tabular}
 	\caption{Traceability Between Test Cases and Requirements}
-	\label{Table:Traceability} 
+	\label{Table:TraceabilityTandR} 
 \end{table}
 
 \FloatBarrier
 
 \section{Static Verification Techniques} \label{StaticVerTechniques}
 
-Static verification of the \famname{} library implementation will performed 
-using code review with Dr. Spencer Smith and my CAS 741 classmates (the 
-comments will be in the form of GitHub issues).
+If the time permits, static verification of the \famname{} library 
+implementation will performed using code review with Dr.~Spencer Smith and my 
+CAS 741 classmates (the comments will be in the form of GitHub issues).
 
 \newpage
 				
@@ -562,6 +581,6 @@ There are no symbolic parameters used in this document.
 	Why have you given the above score?
 \end {enumerate}
 
-\wss{Good survey questions.}
+\wss{Good survey questions.}\hz{thank you}
 
 \end{document}
