@@ -36,8 +36,8 @@
 
 \begin{document}
 
-\title{Module Guide: A Library of Simplex Method Solvers \wss{Work the name of
-    your library into your MG title}} 
+\title{Module Guide: A Library of Simplex Method Solvers (\famname{}) \wss{Work 
+the name of your library into your MG title}\hz{done.}} 
 \author{Hanane Zlitni}
 \date{November 05, 2018}
 
@@ -50,6 +50,9 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+December 17, 2018 & 2.0 & Final Draft (includes making the document consistent 
+with the rest of the deliverables)\\
+December 16, 2018 & 1.2 & Applied Dr.~Smith’s Comments\\
 December 06, 2018 & 1.1 & Applied Vajiheh Motamer's Comments Posted on GitHub\\
 November 05, 2018 & 1.0 & First Draft\\
 \bottomrule
@@ -161,9 +164,6 @@ change.
 \item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
   hardware on which the software is running.
   
-\item[\refstepcounter{acnum} \actheacnum \label{acInterface}:] The library's 
-external interface.
-  
 \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
   initial input data.
   
@@ -196,8 +196,9 @@ decisions will be changed.
 
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucObjective}:] The objective of 
 the \famname{} library will always be to find and output the optimal 
-solution(s) of linear programs given the objective function, linear constraints 
-and the objective function goal.
+solution of linear programs along with the values of the decision variables 
+given the objective function, linear constraints and the objective function 
+goal.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -210,10 +211,9 @@ actually be implemented.
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
 \item [\refstepcounter{mnum} \mthemnum \label{mBH}:] Behaviour-Hiding Module
-\item [\refstepcounter{mnum} \mthemnum \label{mInput}:] Input Module
-\item [\refstepcounter{mnum} \mthemnum \label{mTableau}:] Tableau Module
-\item [\refstepcounter{mnum} \mthemnum \label{mSimplex}:] Simplex Method Solver
-\item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Module
+\item [\refstepcounter{mnum} \mthemnum \label{mSimplex}:] Simplex Method Solver 
+Module
+\item [\refstepcounter{mnum} \mthemnum \label{mExceptions}:] Exceptions Module
 \end{description}
 
 Note that \mref{mHH} is a commonly used module and is already implemented by 
@@ -240,10 +240,8 @@ problems and one for minimization problems.
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module}
-& Input\\ 
-& Tableau\\
 & Simplex Method Solver\\
-& Output\\
+& Exceptions\\
 \bottomrule
 
 \end{tabular}
@@ -311,48 +309,34 @@ selected.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Module (\mref{mInput})}
-
-\begin{description}
-	\item[Secrets:]The format and structure of the input data.
-	\item[Services:]Gets the inputs from the client, verifies that they are 
-	valid, 
-	throws an error if the inputs violate any constraints.
-	\item[Implemented By:] \famname{}
-\end{description}
-
-\subsubsection{Tableau Module (\mref{mTableau})}
-\hz{needs editing}
-\begin{description}
-	\item[Secrets:]The data structure for a matrix (i.e. the simplex method 
-	tableau).
-	\item[Services:]Converts the values in the input conversion module to a 
-	matrix (2D array) and communicates with the simplex method solver for 
-	matrix operations.
-	\item[Implemented By:] \famname{}
-\end{description}
-
 \subsubsection{Simplex Method Solver (\mref{mSimplex})}
 
 \begin{description}
-	\item[Secrets:]The simplex algorithm implementation for solving 
-	maximization and minimization linear programming problems.
-	\item[Services:]Solves maximization and minimization linear programs using 
-	the simplex method.
+	\item[Secrets:]The structure of the input data, the data structure of the 
+	simplex tableau, the simplex algorithm implementation for solving 
+	maximization and minimization linear programming problems, the structure of 
+	the output data.
+	\item[Services:]Receives inputs, checks that they're not empty, throws an 
+	error in case of a violation, adds the inputs to a 2D array (simplex 
+	tableau), performs the simplex method steps to calculate the solution, 
+	outputs the solution to the client.
 	\item[Implemented By:] \famname{}
+	\item[Justification:] I chose to encapsulate all components of \famname{} 
+	in one module because they are so interleaved and highly dependent on one 
+	another that separating them caused the modules to have very high coupling.
 \end{description}
 
-\subsubsection{Output Module (\mref{mOutput})}
+\subsubsection{Exceptions Module (\mref{mExceptions})}
 
 \begin{description}
-	\item[Secrets:]The format and structure of the output data.
-	\item[Services:]Outputs the optimal solution of the linear program and the 
-	point where it occurs which are obtained from the simplex method solvers.
+	\item[Secrets:]The types of exceptions that the library throws.
+	\item[Services:]Catches the exceptions thrown by the simplex solver module 
+	and generates the corresponding exception message.
 	\item[Implemented By:] \famname{}
 \end{description}
 
 \section{Traceability Matrix} \label{SecTM}
-\hz{needs editing}
+
 This section shows two traceability matrices: between the modules and the
 requirements and between the modules and the anticipated changes.
 
@@ -364,14 +348,13 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mEI}, \mref{mInput}\\
-R2 & \mref{mInput}\\
-R3 & \mref{mInput}\\
-R4 & \mref{mIC}\\
-R5 & \mref{mIC}\\
-R6 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
-R7 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
-R8 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
+R\ref{R_Inputs} & \mref{mHH}, \mref{mSimplex}\\
+R\ref{R_HandleInputErrors} & \mref{mSimplex}\\
+R\ref{R_DisplayErrorMsg} & \mref{mExceptions}\\
+R\ref{R_CanonicalForm} & \mref{mSimplex}\\
+R\ref{R_Calculate} & \mref{mSimplex}\\
+R\ref{R_Output} & \mref{mSimplex}\\
+R\ref{R_OutputError} & \mref{mExceptions}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -385,12 +368,11 @@ R8 & \mref{mDataStructure}, \mref{mSimplex}, \mref{mOutput}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInterface} & \mref{mEI}\\
-\acref{acInput} & \mref{mInput}, \mref{mIC}\\
-\acref{acInputAssumption} & \mref{mInput}, \mref{mIC}\\
-\acref{acInputDataStructure} & \mref{mDataStructure}\\
+\acref{acInput} & \mref{mSimplex}\\
+\acref{acInputAssumption} & \mref{mSimplex}\\
+\acref{acInputDataStructure} & \mref{mSimplex}\\
 \acref{acAlgorithm} & \mref{mSimplex}\\
-\acref{acOutput} & \mref{mOutput}\\
+\acref{acOutput} & \mref{mSimplex}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -409,10 +391,11 @@ traceability are the leaf modules.}
   separate module.  Maybe in this case you feel like you have two secrets, but
   if the two secrets always happen together, then module consolidation might
   make sense.  As you write your MIS, it should become clear whether you really
-  have two modules.}
+  have two modules.}\hz{the table has been changed to reflect the change in the 
+  design.}
 
 \section{Use Hierarchy Between Modules} \label{SecUse}
-\hz{needs editing}
+
 In this section, the uses hierarchy between modules is
 provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
 correct execution of B may be necessary for A to complete the task described in
@@ -437,7 +420,8 @@ because they use modules from the lower levels.
   external interface module would use the simplex solver and then relay the
   results to the output module.  Will the output module actually call the
   simplex solver itself?  I would think that the input module would use the data
-  structure module, not the other way around?}
+  structure module, not the other way around?}\hz{The hierarchy has been 
+  changes to reflect the changes in the design.}
 
 \newpage
 
