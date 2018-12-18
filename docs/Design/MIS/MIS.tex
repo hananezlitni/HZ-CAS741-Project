@@ -58,6 +58,9 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+December 17, 2018 & 2.0 & Final Draft (includes making the document consistent 
+with the rest of the deliverables)\\
+December 16, 2018 & 1.2 & Applied Dr.~Smith’s Comments\\
 December 06, 2018 & 1.2 & Applied Olu Owojaiye's Comments Posted on GitHub\\
 December 03, 2018 & 1.1 & Corrected solveLP() and pivot() pseudo-code in 8.4.4 
 and 8.4.5\\
@@ -82,7 +85,6 @@ document: \\
 	\textbf{symbol} & \textbf{description}\\
 	\midrule 
 	$Z$ & Optimal solution(s) of the objective function\\
-	$K$ & The points where the optimal solution(s) occur\\
 	$Z'$ & The negation of the objective function\\
 	$n$ & A number in [0, $\mathbb{N}$) representing the rows in the simplex 
 	tableau \\
@@ -162,10 +164,8 @@ The following table is taken directly from the Module Guide document for this pr
 		\midrule
 		
 		\multirow{3}{0.3\textwidth}{Software Decision Module}
-		& Input\\ 
-		& Tableau\\
 		& Simplex Method Solver\\
-		& Output\\
+		& Exceptions\\
 		\bottomrule
 	\end{tabular}
 	\caption{Module Hierarchy}
@@ -175,15 +175,15 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS of the Input Module} \label{M_IM} 
+\section{MIS of the Simplex Method Solver Module} \label{M_SimplexSolver} 
 
 \subsection{Module}
 
-input
+SimplexSolverADT
 
 \subsection{Uses}
 
-None
+Exceptions
 
 \subsection{Syntax}
 
@@ -194,40 +194,27 @@ None
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-	\begin{tabular}{p{3cm} p{4cm} p{4cm} p{4cm}}
+	\begin{tabular}{p{4cm} p{4cm} p{3cm} p{5cm}}
 		\hline
 		\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 		\hline
-		readInputs & $\mathbb{R} ^m$, $\mathbb{R} ^{n*m}$, lctEnum$^{n-1}$, 
-		gEnum & - & MISSING{\_}INPUT \\
-		validateInputs & - & - & INVALID{\_}INPUT \\
-		getObjcFunc & - & $\mathbb{R} ^m$ & - \\
-		getLCs & - & $\mathbb{R} ^{n*m}$ & - \\
-		getLCsType & - & lctEnum$^{n-1}$ & - \\
-		getGoal & - & gEnum & - \\
-		setObjcFunc & $\mathbb{R} ^m$ & - & - \\
-		setLCs & $\mathbb{R} ^{n*m}$ & - & - \\
-		setLCsType & lctEnum$^{n-1}$ & - & - \\
-		setGoal & gEnum & - & - \\
+		solveLP & $\mathbb{R} ^{n*m}$, $\mathbb{R} ^{n}$, $\mathbb{R} ^{m}$, 
+		$\mathbb{R} ^{m}$, gEnum & - & NO\_OPTIMAL\_SOLUTION \\
+		formSimplexTableau & - & - & - \\
+		toCanonical & - & - & - \\
+		isOptimumFound & - & boolean & - \\
+		getOptimum & - & $\mathbb{R} ^{i}$ & - \\
 		\hline
 	\end{tabular}
 \end{center}
 
-\hz{Explanation:}
-
-\hz{1. \textit{lctEnum}: an enumerated type that can be 0 ($\leq$), 1 ($=$) or 
-2 ($\geq$) depending on the type of each linear constraint. 
-\textit{lctEnum$^{n-1}$} is an array in which the first element is the type of 
-the first linear constraint, the second element is the second linear constraint 
-type and so on. Its length is the number of rows of the tableau minus the first 
-row (because we want to exclude the objective function).}
-
-\hz{2. \textit{gEnum}: an enumerated type representing the LP goal: 0 (min) or 
-1 (max).}
+\hz{There is no need to define a variable for the linear constraints type 
+because whether it was an equality or inequality, slack/artificial variables 
+would be added}
 
 \wss{This seems like important information to put in comments.  Comments are not
   displayed with the final documentation, so important information needs to be
-  included with the main text.}
+  included with the main text.}\hz{done.}
 
 \wss{For these types you are defining, \textit{lctEnum} and \textit{gEnum},
   please do not use integers that map to something meaningful.  Mathematically
@@ -249,9 +236,23 @@ types like this, you can create a new modules whose purpose is to export the
 \begin{itemize}
 	\item objcFunc:$\mathbb{R} ^m$
 	\item LCs:$\mathbb{R} ^{n*m}$
-	\item LCsType:lctEnum$^{n-1}$ ; where lctEnum = $\{0,1,2\}$
-	\item goal:gEnum ; where gEnum = $\{0,1\}$
+	\item constants:$\mathbb{R} ^{m}$
+	\item goal:gEnum ; where gEnum = $\{MAX,MIN\}$
+	\item sTableau:TableauT
+	\item wasMin:boolean
 \end{itemize}
+
+\subsubsection{Explanation}
+
+\textit{gEnum} is an enumerated type representing the goal of the linear 
+program: MAX for maximization and MIN for minimization. \\
+
+The variable \textit{wasMin} is a way to tell whether the original linear 
+program was a minimization problem or not. If it's a minimization problem, the 
+\textit{goal} state variable will be changed to max and \textit{wasMin} will be 
+set to true. Then, the variable will be checked before outputting the solution- 
+if it's True, the optimal solution $Z$ will be multiplied by -1. Otherwise, it 
+will remain as it is.
 
 \subsubsection{Environment Variables}
 
@@ -264,168 +265,134 @@ None
 \subsubsection{Access Routine Semantics}
 
 \noindent 
-getObjcFunc():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := objcFunc
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getLCs():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := LCs
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getLCsType():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := LCsType
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getGoal():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := goal
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setObjcFunc(\textit{newObjcFunc}):
-\begin{itemize}
-	\item transition: 
-	
-	objcFunc := newObjcFunc
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setLCs(\textit{newLCs}):
-\begin{itemize}
-	\item transition: 
-	
-	LCs := newLCs
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setLCsType(\textit{newLCsType}):
-\begin{itemize}
-	\item transition: 
-	
-	LCsType := newLCsType
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setGoal(\textit{newGoal}):
-\begin{itemize}
-	\item transition: 
-	
-	goal := newGoal
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-readInputs(\textit{obFunc}, \textit{lnrConstr}, \textit{lnrConstrT}, 
+solveLP(\textit{LCs}, \textit{constants}, \textit{objcFunc}, \textit{LCsType}, 
 \textit{goal}):
 \begin{itemize}
-	\item transition: -
+	\item transition: 
+	\begin{enumerate}
+		\item ($\neg$(self.goal = MAX) $\Rightarrow$ self.wasMin = True, 
+		self.objcFunc = self.objcFunc * -1, self.goal = MAX)
+		\item self.formSimplexTableau()
+		\item self.updateEnteringDepartingVars(self.sTableau)
+		\item self.findPivot()
+		\item (pivot $<$ 0 $\Rightarrow$ NO\_OPTIMAL\_SOLUTION)
+		\item self.pivot(pivotIndex)
+		\item Repeat 4, 5 and 6 until there are no negative values in the last 
+		row (excluding the last column)
+		\item self.getOptimum()
+	\end{enumerate}
+	
 	\item output: -
 	\item exception: \textit{exc} := 
 	
-	At least one input missing \hspace{3.5cm} $\Rightarrow$ MISSING{\_}INPUT
+	(self.getOptimum() = 0 $\vee$ self.getOptimum() = ``'' $\Rightarrow$ 
+	NO\_OPTIMAL\_SOLUTION)
 \end{itemize}
 
-\noindent 
-validateInputs():
+\noindent
+formSimplexTableau():
 \begin{itemize}
-	\item transition: -
+	\item transition:
+	\begin{enumerate}
+		\item Initialize \textit{sTableau}
+		\item Update its state by appending \textit{LCs} to it
+		\item Call toCanonical() to convert the tableau to the canonical form 
+		by adding the slack/artificial variables
+		\item Update the state of \textit{sTableau} by appending 
+		\textit{objcFunc} to its bottom row
+		\item Update the state of \textit{sTableau} by appending 
+		\textit{constants} to its last column
+	\end{enumerate}
 	\item output: -
-	\item exception: \textit{exc} := 
-	
-	$\neg$(Last element of LCsType == 2 AND  Last element of LCs == 0) 
-	$\Rightarrow$ INVALID{\_}INPUT \wss{This is math, not a programming
-          language, so tests for equality just  use $=$}\\
-	
-	\hz{Explanation:}
-	
-	\hz{I'm checking if the non-negativity constraint is present in the LCs 
-	matrix. If it isn't, an exception will be generated.}
+	\item exception: -
+\end{itemize}
+
+\noindent
+toCanonical():
+\begin{itemize}
+	\item transition:
+	\begin{enumerate}
+		\item Initialize \textit{slackVariables} matrix
+		\item Initialize \textit{row} list
+		\item Compare between two counters \textit{i} and \textit{j}
+		\item (\textit{i} = \textit{j} $\Rightarrow$ append 1 to \textit{row} 
+		$|$ \textit{i} $\neq$ \textit{j} $\Rightarrow$ append 0 to \textit{row})
+		\item Repeat 3 and 4 for the length of \textit{sTableau}
+		\item Append \textit{row} to \textit{slackVariables}
+		\item Update the state of \textit{sTableau} by appending 
+		\textit{slackVariables} to it
+	\end{enumerate}
+	\item output: -
+	\item exception: -
+\end{itemize}
+
+\noindent
+getOptimum():
+\begin{itemize}
+	\item transition: 
+	\begin{enumerate}
+		\item Initialize the tuple \textit{optimum}
+		\item Get the optimal solution and the points they occur from 
+		\textit{sTableau} and set \textit{optimum} to the values
+		\item (wasMin = True $\Rightarrow$ optimum[`z'] = optimum[`z'] * -1)	
+	\end{enumerate}
+	\item output: \textit{out} := optimum
+	\item exception: -
+\end{itemize}
+
+\noindent
+isOptimumFound()
+\begin{itemize}
+	\item transition:
+	\begin{enumerate}
+		\item Initialize the variable \textit{optimumFound} and set it to True
+		\item Look for negative values in the last row of  \textit{sTableau} 
+		excluding the last column and set \textit{optimumFound} to False if 
+		found
+	\end{enumerate}
+	\item output: \textit{out} := optimumFound 
+	\item exception: -
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-None
+\noindent 
+getEnteringVariable():
 
-~\newpage
+\textcolor{pyComment}{\#\textit{find the most negative value in the last row of 
+sTableau}} \\
 
-\section{MIS of the Tableau Module} \label{M_Tableau} 
+\hspace*{0.3cm} start \\
+\hspace*{2cm} initialize \textit{lastRow} \\
+\hspace*{2cm} \textit{lastRow} = self.sTableau[len(sTableau) - 1] \\
+\hspace*{2cm} initialize \textit{iMostNegative} \\
+\hspace*{2cm} \textit{iMostNegative} = 0 \\
+\hspace*{2cm} initialize \textit{mostNegative} \\
+\hspace*{2cm} \textit{mostNegative} = \textit{lastRow[iMostNegative]} \\
+\hspace*{2cm} for each \textit{entry} in \textit{lastRow} \\
+\hspace*{3cm} if \textit{entry} $<$ \textit{mostNegative}\\
+\hspace*{4cm} if \textit{mostNegative} = \textit{entry}\\
+\hspace*{3cm} update \textit{iMostNegative}\\
+\hspace*{2cm} return \textit{iMostNegative} \\
+\hspace*{0.9cm} end \\
 
-\subsection{Template Module}
+\noindent 
+findPivot():
 
-tableauADT
+\hspace*{0.3cm} start \\
+\hspace*{2cm} return \textit{self.getEnteringVariable()}, 
+\textit{self.getDepartingVariable()} \\
+\hspace*{0.9cm} end \\
 
-\subsection{Uses}
+\noindent 
+pivot(\textit{iPivot}):
 
-input
-
-\subsection{Syntax}
-
-\subsubsection{Exported Constants}
-
-None
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-	\begin{tabular}{p{3cm} p{3cm} p{4cm} p{4cm}}
-		\hline
-		\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-		\hline
-		TableauT & $\mathbb{R}^m,\mathbb{R}^{n*m}$ & TableauT & - \\
-		toCanonical & - & - & - \\
-		getTableau & - & TableauT & - \\
-		getLCsType & - & lctEnum$^{n-1}$ & - \\
-		getGoal & - & gEnum & - \\
-		updateTableau & operEnum & - & - \\
-		setGoal & gEnum & - & - \\
-		setLCsType & lctEnum$^{n-1}$ & - & - \\
-		setWasMin & boolean & - & - \\
-		\hline
-	\end{tabular}
-\end{center}
-
-\hz{Explanation:}
-
-\hz{\textit{TableauT} is an abstract data type that represents a matrix in 
-which the first row is the coefficients of the objective function and the rest 
-of the rows are the coefficients of the linear constraints. The constructor 
-will receive the coefficient array of the objective function and the 
-coefficient matrix of the LCs and will form the simplex tableau.}
-
-\hz{\textit{operEnum} is an enumerated type that represents the type of 
-operation that will be performed on the tableau to update its values.}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-\begin{itemize}
-	\item sTableau:TableauT
-	\item LCsType:lctEnum$^{n-1}$ ; where lctEnum = $\{0,1,2\}$
-	\item goal:gEnum ; where gEnum = $\{0,1\}$
-	\item wasMin:boolean 
-\end{itemize}
+\hspace*{0.3cm} start \\
+\hspace*{2cm} set \textit{i, j} to \textit{iPivot} \\
+\hspace*{2cm} set \textit{pivot} to \textit{sTableau[i][j]} \\
+\hspace*{2cm} for each row in pivot column \\
+\hspace*{3cm} perform a row operation to make entry 0 \\
+\hspace*{0.9cm} end \\
 
 \wss{You shouldn't be defining types here.  Seeing that these types are coming
   up again, I suggest you add a module to your design that exports types.}
@@ -436,289 +403,27 @@ operation that will be performed on the tableau to update its values.}
   maybe you don't need an input module.  As we discussed in class, most of your
   design could be encapsulated in the tableau module.}
 
-\hz{Explanation:}
-
-\hz{\textit{wasMin} is a way to tell whether the original LP was a min problem 
-or not. If it's a min problem, \textit{goal} state variable will be changed to 
-max but information about what it was originally would be lost. Therefore, 
-\textit{wasMin} will be set to "True" if the original LP is a min problem and 
-will be checked after the optimal solution is calculated in the solver module. 
-If \textit{wasMin} is true, $Z$ will be multiplied by -1 because that's the 
-optimum of a min problem.}
-
-\subsubsection{Environment Variables}
-
-None
-
-\subsubsection{Assumptions}
-
-None
-
-\subsubsection{Access Routine Semantics}
-
-\noindent 
-new TableauT(\textit{objcFunc, lnrConstr}):
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := self
-	
-	The output consists of a matrix in which the first row is the coefficients 
-	of the objective function and the rest of the rows are the coefficients of 
-	the linear constraints.
-	
-	\item exception: -
-\end{itemize}
-
-\noindent 
-toCanonical():
-\begin{itemize}
-	\item transition: 
-		\begin{enumerate}
-			\item $\neg$(self.getGoal() == 1) \hspace{4cm} $\Rightarrow$ 
-			self.setWasMin(True) \\
-			\hspace*{8.3cm} $\Rightarrow$ self.setGoal(1) \\
-			\hspace*{8.3cm} $\Rightarrow$ self.updateTableau(0)
-			\item (self.getLCsType() contains 0) \hspace{2.65cm} $\Rightarrow$ 
-			self.setLCsType([1,1,1,...,1]) \\
-			\hspace*{8.3cm} $\Rightarrow$ self.updateTableau(1)
-		\end{enumerate}
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getTableau():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := sTableau
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getLCsType():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := LCsType
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getGoal():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := goal
-	\item exception: -
-\end{itemize}
-
-\noindent 
-updateTableau(\textit{operation}):
-\begin{itemize}
-	\item transition: \textit{operation} is of type operEnum, where operEnum = 
-	\{0,1\} for negating the objective function row in sTableau and adding 
-	slack variables to sTableau, respectively.
-	\begin{enumerate}
-		\item (operation == 0)  \hspace{3cm} $\Rightarrow$ multiply the first 
-		row of sTableau by -1
-		\item (operation == 1) \hspace{3cm} $\Rightarrow$ add slack variables 
-		coefficients to sTableau
-	\end{enumerate} \wss{Use a conditional rule to express this}
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setGoal(\textit{newGoal}):
-\begin{itemize}
-	\item transition: 
-	
-	self.goal := newGoal
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setLCsType(\textit{newLCsType}):
-\begin{itemize}
-	\item transition: 
-	
-	self.LCsType := newLCsType
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setWasMin(\textit{boolValue}):
-\begin{itemize}
-	\item transition: 
-	
-	self.wasMin := boolValue
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\subsubsection{Local Functions}
-
-None.
-
-~\newpage
-
-\section{MIS of the Simplex Method Solver} \label{M_simplexSolver} 
-
-\subsection{Module}
-
-simplexSolver
-
-\subsection{Uses}
-
-tableauADT
-
-\subsection{Syntax}
-
-\subsubsection{Exported Constants}
-
-None
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-	\begin{tabular}{p{2cm} p{4cm} p{3cm} p{5cm}}
-		\hline
-		\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-		\hline
-		solveLP & TableauT, boolean & - & NO\_OPTIMAL\_SOLUTION \\
-		getZ & - & $R^x$ & - \\
-		getK & - & $R^m$ & - \\
-		setZ & $R^x$ & - & - \\
-		setK & $R^m$ & - & - \\
-		\hline
-	\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-\begin{itemize} 
-	\item $Z:\mathbb{R}^x$
-	\item $K:\mathbb{R}^m$
-\end{itemize}
-
 \wss{Add a brief statement on what each state variables is.  I remember what $Z$
   is, but I forget what $K$ means.}
+
 \wss{Using the types $\mathbb{R}^x$ is confusing, since $x$ usually represents a
   real value.}
+
 \wss{Would it be easier if you added a solver method to your tableau module?}
 
-\subsubsection{Environment Variables}
-
-None
-
-\subsubsection{Assumptions}
-
-None
-
-\subsubsection{Access Routine Semantics}
-
-\noindent 
-solveLP(\textit{tableau}, \textit{wasMin}):
-\begin{itemize}
-	\item transition: 
-		\begin{enumerate}
-			\item findPivot(\textit{tableau})
-			\item pivot(\textit{tableau}, \textit{pivotRow}, 
-			\textit{pivotColumn})
-			\item Repeat 1 and 2 until there are no negative values in the last 
-			row (excluding the last column)
-			\item setZ(\textit{optimalSolution})
-			\item setK(\textit{points})
-			%%\item (\textit{wasMin} == True) \hspace{2cm} $\Rightarrow$ 
-			%%setZ($Z'$) ; where $Z'$ = -$Z$
-		\end{enumerate}
-
-	\item output: -
-	\item exception: \textit{exc} := 
-	
-	($Z$ == NULL) \hspace{3.7cm} $\Rightarrow$ NO\_OPTIMAL\_SOLUTION
-\end{itemize}
-
-\noindent 
-getZ():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := $Z$
-	\item exception: -
-\end{itemize}
-
-\noindent 
-getK():
-\begin{itemize}
-	\item transition: -
-	\item output: \textit{out} := $K$
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setZ(\textit{newZ}):
-\begin{itemize}
-	\item transition: 
-	
-	$Z$ := newZ
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\noindent 
-setK(\textit{newK}):
-\begin{itemize}
-	\item transition: 
-	
-	$K$ := newK
-	\item output: -
-	\item exception: -
-\end{itemize}
-
-\subsubsection{Local Functions}
-
-\noindent 
-findPivot(\textit{tableau}):
-
-\hspace*{0.3cm} start \\
-\hspace*{2cm} for each \textit{entry} in \textit{tableau} except for the last 
-column \\
-\hspace*{3cm} min(negative \textit{entry}) \\
-\hspace*{3cm} if \textit{entry} is found: \\
-\hspace*{4cm} \textit{pivotColumn} = j \\
-\hspace*{4cm} \textcolor{pyComment}{\#\textit{j is the column where the most 
-negative entry was found}} \\
-\hspace*{2cm} for each \textit{element} in column \textit{pivotColumn} and 
-\textit{constant} in the last column\\
-\hspace*{3cm} min(\textit{element} / \textit{constant}) \\
-\hspace*{3cm} \textit{pivotRow} = i \\
-\hspace*{3cm} \textcolor{pyComment}{\#\textit{i is the row where the most 
-minimum ratio was found}} \\
-\hspace*{2cm} return \textit{pivotRow, pivotColumn} \\
-\hspace*{0.9cm} end \\
-
-\noindent 
-pivot(\textit{tableau}, \textit{pivotRow}, \textit{pivotColumn}):
-
-\hspace*{0.3cm} start \\
-\hspace*{2cm} for each \textit{row} in \textit{pivotColumn} \\
-\hspace*{3cm} perform a row operation to make entry 0 \\
-\hspace*{2cm} return \textit{tableau} \\
-\hspace*{0.9cm} end \\
+\hz{I have updated the MIS to reflect the changes in the design.}
 
 ~\newpage
 
-\section{MIS of the Output Module} \label{M} 
+\section{MIS of the Exceptions Module} \label{M_Exceptions} 
 
 \subsection{Module}
 
-output
+Exceptions
 
 \subsection{Uses}
 
-simplexSolver 
+None
 
 \subsection{Syntax}
 
@@ -729,11 +434,12 @@ None
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-	\begin{tabular}{p{3cm} p{3cm} p{4cm} p{4cm}}
+	\begin{tabular}{p{6cm} p{4cm} p{3cm} p{3cm}}
 		\hline
 		\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 		\hline
-		output & - & - & - \\
+		MISSING\_INPUT & Error & - & - \\
+		NO\_OPTIMAL\_SOLUTION & Error & - & - \\
 		\hline
 	\end{tabular}
 \end{center}
@@ -746,7 +452,7 @@ None
 
 \subsubsection{Environment Variables}
 
-screen: The device screen of the driver program's user
+None
 
 \subsubsection{Assumptions}
 
@@ -755,18 +461,25 @@ None
 \subsubsection{Access Routine Semantics}
 
 \noindent 
-output():
+MISSING\_INPUT():
 \begin{itemize}
-	\item transition: Display to the environment variable the optimal 
-	solution(s) and the points where they occur by calling 
-	\textit{simplexSolver.getZ()} and \textit{simplexSolver.getK()}.
-	\item output: -
+	\item transition:
+	\item output: \textit{out} := ``At least one input is missing.''
+	\item exception: -
+\end{itemize}
+
+\noindent 
+NO\_OPTIMAL\_SOLUTION():
+\begin{itemize}
+	\item transition:
+	\item output: \textit{out} := ``This linear program does not have an 
+	optimal solution.''
 	\item exception: -
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-None.
+None
 
 \newpage
 
