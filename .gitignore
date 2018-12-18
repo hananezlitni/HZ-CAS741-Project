@@ -10,3 +10,4 @@
 *.lof
 *.lot
 *.DS_Store
+*.coverage
