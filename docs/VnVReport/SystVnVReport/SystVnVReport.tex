@@ -1,0 +1,414 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{xr}
+\usepackage{color,soul}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage[tablename=Table,aboveskip=5pt,belowskip=5pt]{caption}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=magenta,
+    linkcolor=black,
+    urlcolor=cyan
+}
+\usepackage[round]{natbib}
+
+\input{../../Comments}
+
+\externaldocument{../../SRS/CA}
+\externaldocument{../../VnVPlan/SystVnVPlan/SystVnVPlan}
+\externaldocument{../../Design/MIS/MIS}
+
+\newcommand{\progname}{Library of Simplex Method Solvers}
+\newcommand{\famname}{LoSMS}
+
+\begin{document}
+
+\title{System Verification and Validation Test Report: A \progname{} 
+(\famname{})} 
+\author{Hanane Zlitni}
+\date{December 18, 2018}
+	
+\maketitle
+
+\pagenumbering{roman}
+
+\section{Revision History}
+
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\midrule
+December 15, 2018 & 1.0 & First draft\\
+\bottomrule
+\end{tabularx}
+
+~\newpage
+
+\section{Symbols, Abbreviations and Acronyms}
+
+The following symbols, abbreviations and acronyms were used in this document: \\
+
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  \famname{} & Library of Simplex Method Solvers\\
+  T & Test\\
+  R & Requirements\\
+  NFR & Nonfunctional Requirements\\
+  V\&V & Verification and Validation\\
+  $s.\;t.$ & Subject to\\
+  $Z$ & Optimal solution of the objective function\\
+  $x_1, x_2, x_3$ & Decision variables\\
+  $\epsilon_{subscript}$ & The relative error of the subscript\\
+  s & seconds\\
+  \bottomrule
+\end{tabular}\\
+
+\newpage
+
+\tableofcontents
+
+\listoftables %if appropriate
+
+\newpage
+
+\pagenumbering{arabic}
+
+This document reports all results obtained from testing the \progname{} 
+(\famname{}) tool. The test cases under evaluation, along with the full 
+documentation of the library, can be found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project} \\
+
+The document starts by outlining the results of the test cases related to the 
+tool's functional requirements in Section \ref{FuncReqsEval}. Then, the results 
+of the test cases related to the non-functional requirements are reported in 
+Section \ref{NonFuncReqsEval}. This is followed by Sections 
+\ref{ComparisonImplem}, \ref{UnitTesting} and \ref{ChangesDueToTesting}, which 
+discuss comparing any previous implementations with the existing one, unit 
+testing of the library and changes which occured after testing, respectively. 
+Section \ref{AutomatedTesting} discusses the tests that were executed 
+automatically, while sections \ref{ReqTrace} and \ref{ModTrace} provide 
+traceability tables for the tests with the requirements and modules. Sections 
+\ref{CodeCoverage} concludes the document by discussing the metrics used to 
+achieve code coverage.
+
+\section{Functional Requirements Evaluation} \label{FuncReqsEval}
+
+T\ref{Max_Opt} \& T\ref{Max_NoOpt} in the System V\&V Plan verified the cases 
+where a maximization linear program has and doesn't have an optimal solution. 
+Both test cases have passed. \\
+
+T\ref{Min_Opt} \& T\ref{Min_NoOpt} in the System V\&V Plan verified the cases 
+where a minimization linear program has and doesn't have an optimal solution. 
+Both test cases have passed. \\
+
+T\ref{NoObjcFunc} \& T\ref{NoLCs} in the System V\&V Plan verified the cases 
+where the objective function and linear constraints, respectively, are missing. 
+Both test cases have passed. \\
+
+The System V\&V Plan can be found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf}.
+
+\section{Nonfunctional Requirements Evaluation} \label{NonFuncReqsEval}
+
+\subsection{Usability}
+
+A usability study was conducted to check whether \famname{} user-friendly or 
+not (T\ref{Usability} in the System V\&V Plan). \\
+
+The participant, Soumaya Zlitni, was given the linear program to solve after 
+reading the information provided in the project repository's README.md file 
+(found at: 
+\hz{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/src/README.md}).
+ At the end of the usability testing, Soumaya filled in the usability survey 
+ that was handed to her. The filled survey can be found in the appendix 
+ (Section \ref{UsabilityTestingQs}). \\
+ 
+ There might have been some bias in the usability testing since the participant 
+ is a relative.
+		
+\subsection{Portability}
+
+T\ref{Portability} in the System V\&V Plan specified the 3 operating systems 
+that \famname{} should be operable on: Windows, MacOS and Linux. \\
+
+The tool was ran twice in each operating system: once with the linear program 
+in T\ref{Max_Opt} in the System V\&V Plan and once with the same linear program 
+but with a missing input (the linear program goal). This was done to test the 
+behaviour of the library in the correct and incorrect conditions in each 
+operating system. \\
+
+Running the library on Windows and Linux specified the Python libraries that 
+the tool depends on to execute without errors. The details of the dependencies 
+and how to download them are explained in the README.md file in the project's 
+GitHub repository, found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/blob/master/src/README.md}.
+ The portability test passed for all 3 
+operating systems by printing the correct optimum in the first execution and 
+the missing input exception message in the second execution. \\
+
+\subsection{Accuracy}
+
+T\ref{Accuracy} in the System V\&V Plan tests the accuracy of the solutions 
+produced by \famname{}. \\
+
+The following table reports the relative errors of the expected outputs for 
+each test case detailed in the System V\&V Plan that produces numbers. \\
+
+\noindent
+\begin{tabularx}{\textwidth}{p{1.5cm}p{3cm}p{4.5cm}p{6cm}X}
+	\toprule {\bf T} & {\bf Expected} & {\bf Actual} & {\bf Relative Error}\\
+	\midrule
+	T\ref{Max_Opt} & $Z$= 3 \newline
+					 $x_1$= 0 \newline
+					 $x_2$= 0 \newline
+					 $x_3$= 3 \newline
+				   & $Z$= 3.00 \newline
+				     $x_1$= 0 \newline
+				     $x_2$= 0 \newline
+				     $x_3$= 3.0 \newline 
+				   & $\epsilon_Z$ = 0 \newline
+				     $\epsilon_{x_1}$ = 0 \newline 
+				     $\epsilon_{x_2}$ = 0 \newline 
+				     $\epsilon_{x_3}$ = 0 \newline  
+				  \\
+	T\ref{Min_Opt} & $Z$= -4.57 \newline
+					 $x_1$= 2.29 \newline
+					 $x_2$= 0 \newline
+				   & $Z$= -4.5714 \newline
+					 $x_1$= 2.2857 \newline
+					 $x_2$= 0 \newline
+				   & $\epsilon_Z$ = 0.0003 \newline
+					 $\epsilon_{x_1}$ = 0.00188 \newline 
+					 $\epsilon_{x_2}$ =  0\newline
+				  \\ 
+	\bottomrule
+\end{tabularx}
+\captionof{table}{Relative Errors of Expected Outputs}
+
+\subsection{Correctness}
+
+T\ref{Correctness} in the Systen V\&V Plan tests the correctness of the 
+library. The test was done by solving the same linear program using \famname{} 
+and MatLab, then comparing the output of both programs. \\
+
+The following table reports the result: \\
+
+\noindent
+\begin{tabularx}{\textwidth}{p{5.5cm}p{4cm}p{4cm}X}
+	\toprule {\bf Problem} & {\bf \famname{}} & {\bf MatLab} \\
+	\midrule
+	min$\;Z\;=\;-x_1\;-\;2x_2$\newline
+	$s.\;t.$$\hspace*{0.5cm} 2x_1\;+\;x_2\; = \;10$\newline
+	$\hspace*{1.2cm} x_1\;+\;x_2\; = \;6$\newline
+	$\hspace*{1.2cm} -x_1\;+\;x_2\; = \;2$\newline
+	$\hspace*{1.2cm} -2x_1\;+\;x_2\; = \;1$\newline
+	
+	& $Z$= -10.00 \newline
+	  $x_1$= 2.0 \newline
+	  $x_2$= 4.0 \newline
+	& $Z$= -10.00 \newline
+	  $x_1$= 2.00 \newline
+	  $x_2$= 2.00 \newline
+	\\
+	\bottomrule
+\end{tabularx}
+\captionof{table}{Output Correctness for \famname{} and MatLab}
+
+\subsection{Performance}
+
+T\ref{Performance} in the System V\&V Plan tests the peformance of the library. 
+The test was done by solving the same linear program using \famname{} and 
+MatLab, then comparing the elapsed time (\textit{time at the start of the 
+execution} - \textit{time at the end of the execution}) for both programs. \\
+
+The following table reports the result: \\
+
+\noindent
+\begin{tabularx}{\textwidth}{p{5.5cm}p{4cm}p{4cm}X}
+	\toprule {\bf Problem} & {\bf \famname{}} & {\bf MatLab} \\
+	\midrule
+	min$\;Z\;=\;-x_1\;-\;2x_2$\newline
+	$s.\;t.$$\hspace*{0.5cm} 2x_1\;+\;x_2\; = \;10$\newline
+	$\hspace*{1.2cm} x_1\;+\;x_2\; = \;6$\newline
+	$\hspace*{1.2cm} -x_1\;+\;x_2\; = \;2$\newline
+	$\hspace*{1.2cm} -2x_1\;+\;x_2\; = \;1$\newline
+	
+	& 0.000549 s
+	& 0.054326 s
+				\\
+	\bottomrule
+\end{tabularx}
+\captionof{table}{Elapsed Time for Executions of \famname{} and MatLab}
+
+\subsection{Stability}
+
+Stress testing using a third-party tool was planned for \famname{} to verify 
+its behaviour under heavy load. However, due to not finding a tool that 
+automatically loads a very large number of inputs to the library, the other 
+tests were prioritized and this one was moved to a second phase of testing 
+using other methods.
+	
+\section{Comparison to Existing Implementation}	 \label{ComparisonImplem}
+
+This section is not applicable for \famname{}.
+
+\section{Unit Testing}  \label{UnitTesting}
+
+The unit testing of the \famname{} tool is discussed in details in the Unit 
+V\&V Report found at:
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/tree/master/docs/VnVReport/UnitVnVReport/UnitVnVReport.pdf}.
+
+\section{Changes Due to Testing}  \label{ChangesDueToTesting}
+
+Initially, The output of \famname{} was a string consisting of the optimal 
+solution and the points where it occurs. The string had to be changed to a 
+\textit{dictionary} (see 
+\url{https://docs.python.org/3/tutorial/datastructures.html#dictionaries}) 
+because the assert function in Unittest compared dictionaries and not strings. 
+\\
+
+The test cases for missing inputs in the System V\&V Plan initially failed 
+because there was a bug in the condition that checked for missing inputs and 
+was producing an incorrect output. Upon modifying the condition, the correct 
+output was produced and the tests have passed.
+
+\section{Automated Testing} \label{AutomatedTesting}
+
+All the test cases for functional requirements were automated using Unittest 
+provided by Python. The implemented tests are executed by entering a command in 
+the command line tool.
+		
+\section{Trace to Requirements} \label{ReqTrace}
+
+Table \ref{Table:Traceability} shows the traceability between the test cases in 
+the System V\&V Plan and the requirements.
+
+\begin{table} [h!]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline	
+		\textbf{T} & \textbf{Requirements}\\
+		\hline 
+		T\ref{Max_Opt}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{Max_NoOpt}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{Min_Opt}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{Min_NoOpt}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{NoObjcFunc}& R\ref{R_Inputs}, R\ref{R_HandleInputErrors}, 
+						 R\ref{R_DisplayErrorMsg}\\ \hline
+		T\ref{NoLCs}& R\ref{R_Inputs}, R\ref{R_HandleInputErrors}, 
+					  R\ref{R_DisplayErrorMsg}\\ \hline
+		T\ref{Usability}& NFR\ref{NFR_usability}\\ \hline
+		T\ref{Portability}& NFR\ref{NFR_portability}\\ \hline
+		T\ref{Accuracy}& NFR\ref{NFR_accuracy}\\ \hline
+		T\ref{Correctness}& NFR\ref{NFR_correctness}\\ \hline
+		T\ref{Performance}& NFR\ref{NFR_performance}\\ \hline
+		T\ref{Stability}& NFR\ref{NFR_stability}\\ \hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Requirements}
+	\label{Table:Traceability} 
+\end{table}
+		
+\section{Trace to Modules} \label{ModTrace}	
+
+Table \ref{Table:Traceability2} shows the traceability between the test cases 
+and the modules. \\
+
+\begin{table} [h!]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline	
+		\textbf{T} & \textbf{Modules}\\
+		\hline 
+		T\ref{Max_Opt}& Simplex Method Solver Module\\ \hline
+		T\ref{Max_NoOpt}& Simplex Method Solver Module, Exceptions Module\\ 
+		\hline
+		T\ref{Min_Opt}& Simplex Method Solver Module\\ \hline
+		T\ref{Min_NoOpt}& Simplex Method Solver Module, Exceptions Module\\ 
+		\hline
+		T\ref{NoObjcFunc}& Simplex Method Solver Module\\ \hline
+		T\ref{NoLCs}& Simplex Method Solver Module\\ \hline
+		T\ref{Usability}& Simplex Method Solver Module\\ \hline
+		T\ref{Portability}& Simplex Method Solver Module\\ \hline
+		T\ref{Accuracy}& Simplex Method Solver Module\\ \hline
+		T\ref{Correctness}& Simplex Method Solver Module\\ \hline
+		T\ref{Performance}& Simplex Method Solver Module\\ \hline
+		T\ref{Stability}& Simplex Method Solver Module\\ \hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Modules}
+	\label{Table:Traceability2} 
+\end{table}
+
+\newpage
+
+\section{Code Coverage Metrics} \label{CodeCoverage}
+
+This section is discussed in details in the Unit V\&V Report found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/tree/master/docs/VnVReport/UnitVnVReport/UnitVnVReport.pdf}.
+
+\newpage
+
+\bibliographystyle{plainnat}
+\bibliography {../../../refs/References}
+
+\newpage
+
+\section{Appendix}
+
+This section provides additional content related to this document.
+
+\subsection{Usability Survey Questions} \label{UsabilityTestingQs}
+
+\subsubsection{Participtant 1: Soumaya Zlitni}
+
+\begin{enumerate}
+	\item Did \famname{} successfully provide all the services you requested?
+	
+	(	\hl{Yes}	/	No	)
+	
+	Why have you chosen the above response? It was clear what the input needed 
+	to be.
+	
+	\item How confident are you that \famname{} provided you with the correct 
+	results?
+	
+	(	1	/	2	/	3	/	4	/	\hl{5}	) ; \textit{(1) being not 
+	confident at all and (5) being very confident}
+	
+	Why have you given the above score? Because everything was clear and left 
+	little room for any confusion.
+	
+	\item How satisfied are you with the library's response time?  
+	
+	(	1	/	2	/	3	/	4	/	\hl{5}	) ; \textit{(1) being not 
+	satisfied at all and (5) being very satisfied} 
+	
+	Why have you given the above score? The tool was very fast in giving me the 
+	output.
+	
+	\item How likely are you to recommend \famname{} to a friend?
+	
+	(	1	/	2	/	3	/	4	/	\hl{5}	) ; \textit{(1) being very 
+	unlikely and (5) being very likely} 
+	
+	Why have you given the above score? The tool does what it is supposed to do.
+	
+	\item Rate your overall satisfaction with \famname{} out of 10 
+	
+	(	1	/	2	/	3	/	4	/	5	/	6	/	7	/	8	/	\hl{9}	
+	/	10	)
+	
+	Why have you given the above score? The tool did what it is supposed to do 
+	in a very short amount of time. The inputs that should be entered were 
+	clear.
+	\end {enumerate}
+
+\end{document}

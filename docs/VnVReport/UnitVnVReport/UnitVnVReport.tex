@@ -1,0 +1,243 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{xr}
+\usepackage{color,soul}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage[tablename=Table,aboveskip=5pt,belowskip=5pt]{caption}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=magenta,
+    linkcolor=black,
+    urlcolor=cyan
+}
+\usepackage[round]{natbib}
+
+\input{../../Comments}
+
+\externaldocument{../../SRS/CA}
+\externaldocument{../../VnVPlan/SystVnVPlan/SystVnVPlan}
+\externaldocument{../../VnVPlan/UnitVnVPlan/UnitVnVPlan}
+\externaldocument{../../Design/MIS/MIS}
+\externaldocument{../SystVnVReport/SystVnVReport}
+
+\newcommand{\progname}{Library of Simplex Method Solvers}
+\newcommand{\famname}{LoSMS}
+
+\begin{document}
+
+\title{System Verification and Validation Test Report: A \progname{} 
+(\famname{})} 
+\author{Hanane Zlitni}
+\date{December 18, 2018}
+	
+\maketitle
+
+\pagenumbering{roman}
+
+\section{Revision History}
+
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\midrule
+December 15, 2018 & 1.0 & First draft\\
+\bottomrule
+\end{tabularx}
+
+~\newpage
+
+\section{Symbols, Abbreviations and Acronyms}
+
+See System V\&V Report found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/tree/master/docs/VnVReport/SystVnVReport/SystVnVReport.pdf}.
+
+\newpage
+
+\tableofcontents
+
+\listoftables %if appropriate
+
+\newpage
+
+\pagenumbering{arabic}
+
+This document reports all results obtained from testing the \progname{} 
+(\famname{}) tool. The test cases under evaluation, along with the full 
+documentation of the library, can be found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project} \\
+
+The document starts by outlining the results of the test cases related to the 
+tool's functional requirements in Section \ref{FunReqsEval}. Then, the results 
+of the test cases related to the non-functional requirements are reported in 
+Section \ref{NonFunReqsEval}. This is followed by Sections 
+\ref{Comparison}, \ref{unitTesting} and \ref{ChangesAfterTesting}, which 
+discuss comparing any previous implementations with the existing one, unit 
+testing of the library and changes which occured after testing, respectively. 
+Section \ref{AutomatedTest} discusses the tests that were executed 
+automatically, while sections \ref{TraceReq} and \ref{TraceMod} provide 
+traceability tables for the tests with the requirements and modules. Sections 
+\ref{codeCoverage} concludes the document by discussing the metrics used to 
+achieve code coverage.
+
+\section{Functional Requirements Evaluation} \label{FunReqsEval}
+
+See Section \ref{unitTesting}.
+
+\section{Nonfunctional Requirements Evaluation} \label{NonFunReqsEval}
+
+This section will report the accuracy of the outputs obtained from executing 
+the test cases in the Unit V\&V Plan. \\
+
+The evaluation of the rest of the qualities were detailed in the System V\&V 
+Report found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/tree/master/docs/VnVReport/SystemVnVReport/SystemVnVReport.pdf}.
+
+\subsection{Accuracy}
+
+T\ref{Accuracy} in the System V\&V Plan tests the accuracy of the solutions 
+produced by \famname{}. \\
+
+The following table reports the relative errors of the expected outputs for 
+each test case detailed in the Unit V\&V Plan that produces numbers. \\
+
+\noindent
+\begin{tabularx}{\textwidth}{p{1.5cm}p{3cm}p{4.5cm}p{6cm}X}
+	\toprule {\bf T} & {\bf Expected} & {\bf Actual} & {\bf Relative Error}\\
+	\midrule
+	T\ref{solveLpMax1} & $Z$= 1052000 \newline
+	$x_1$= 4 \newline
+	$x_2$= 10 \newline
+	$x_3$= 14 \newline
+	& $Z$= 1052000.0 \newline
+	$x_1$= 4.0 \newline
+	$x_2$= 10.0 \newline
+	$x_3$= 14.0 \newline 
+	& $\epsilon_Z$ = 0 \newline
+	$\epsilon_{x_1}$ = 0 \newline 
+	$\epsilon_{x_2}$ = 0 \newline 
+	$\epsilon_{x_3}$ = 0 \newline  
+	\\
+	T\ref{solveLpMax2} & $Z$= 180 \newline
+	$x_1$= 40 \newline
+	$x_2$= 30 \newline
+	&$Z$= 180.0 \newline
+	$x_1$= 40.0 \newline
+	$x_2$= 30.0 \newline
+	& $\epsilon_Z$ = 0 \newline
+	$\epsilon_{x_1}$ = 0 \newline 
+	$\epsilon_{x_2}$ =  0\newline
+	\\
+	\bottomrule
+\end{tabularx}
+\captionof{table}{Relative Errors of Expected Outputs}
+	
+\section{Comparison to Existing Implementation}	 \label{Comparison}
+
+This section is not applicable for \famname{}.
+
+\section{Unit Testing} \label{unitTesting}
+
+T\ref{solveLpMax1} \& T\ref{solveLpMax2} in the Unit V\&V Plan verify the 
+\textit{solveLP()} function for 2 maximization linear programs. The addition of 
+these 2 test cases was intended to have a thorough coverage of the cases. Both 
+test have passed.\\
+
+T\ref{solveLpMin} in the Unit V\&V Plan verifies the \textit{solveLP()} 
+function for a minimization linear program that doesn't have an optimal 
+solution. The test has passed.\\
+
+The Unit V\&V Plan can be found at: 
+\url{https://github.com/hananezlitni/HZ-CAS741-Project/tree/master/docs/VnVPlan/UnitVnVPlan/UnitVnVPlan.pdf}.
+
+\section{Changes Due to Testing} \label{ChangesAfterTesting}
+
+No changes besides what was detailed in the System V\&V Report were made.
+
+\section{Automated Testing} \label{AutomatedTest}
+
+All for functional requirements were automated using \textit{unittest} provided 
+by Python. The implemented tests are executed by entering a command in the 
+command line tool.
+		
+\section{Trace to Requirements} \label{TraceReq}
+
+Table \ref{Table:ReqTraceability} shows the traceability between the test cases 
+in the System V\&V Plan and the requirements.
+
+\begin{table} [h!]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline	
+		\textbf{T} & \textbf{Requirements}\\
+		\hline 
+		T\ref{solveLpMax1}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{solveLpMax2}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+		T\ref{solveLpMin}& R\ref{R_Inputs}, R\ref{R_CanonicalForm}, 
+		R\ref{R_Calculate}, R\ref{R_Output}\\ \hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Requirements}
+	\label{Table:ReqTraceability} 
+\end{table}
+		
+\section{Trace to Modules} \label{TraceMod}	
+
+Table \ref{Table:ModTraceability} shows the traceability between the test cases 
+and the modules. \\
+
+\begin{table} [h!]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline	
+		\textbf{T} & \textbf{Modules}\\
+		\hline 
+		T\ref{solveLpMax1}& Simplex Method Solver Module \\ \hline
+		T\ref{solveLpMax2}& Simplex Method Solver Module \\ \hline
+		T\ref{solveLpMin}& Simplex Method Solver Module, Exceptions Module \\ 
+		\hline
+	\end{tabular}
+	\caption{Traceability Between Test Cases and Modules}
+	\label{Table:ModTraceability} 
+\end{table}
+
+\newpage 
+
+\section{Code Coverage Metrics} \label{codeCoverage}
+
+It was important to ensure that the implemented test cases were achieving the 
+highest possible code coverage. To verify this, Python's \textit{Coverage.py} 
+tool was used. \\
+
+The tested linear program was: \\
+
+min$\;Z\;=\;-2x_1\;+\;3x_2$\newline
+$s.\;t.$ $\hspace*{0.5cm} 3x_1\;+\;4x_2\; = \;24$\newline
+$\hspace*{1.2cm} 7x_1\;+\;4x_2\; = \;16$\\
+
+Table 4 reports the code coverage that the test cases achieved:\\
+
+\noindent
+\begin{tabularx}{\textwidth}{p{5cm}p{3cm}p{2.5cm}p{3cm}X}
+	\toprule {\bf Module} & {Statements} & {Missing} & {Coverage} \\
+	\midrule
+	Exceptions.py & 6 & 0 & 100\% \\
+	
+	SimplexSolverADT.py & 131 & 1 & 99\% \\
+	
+	SimplexSolverADT\_Test.py & 14 & 0 & 100\% \\
+	
+	Total & 151 & 1 & 99\% \\
+	
+	\bottomrule
+\end{tabularx}
+\captionof{table}{Code Coverage Results by Coverage.py}
+
+~\newpage
+
+\bibliographystyle{plainnat}
+\bibliography{../../../refs/References}
+
+\end{document}
