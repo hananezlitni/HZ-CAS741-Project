@@ -1,5 +1,3 @@
-# Test Report
+# System Verification & Validation Report
 
-The folders and files for this folder are as follows:
-
-Describe ...
+This folder contains the project's system verification and validation report in .pdf and .tex formats.
