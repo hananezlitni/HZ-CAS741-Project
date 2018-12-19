@@ -35,7 +35,7 @@ where:
 
 To solve the following linear program:
 
-<p align="center" style="width:50%">
+<p align="center">
 <img src="./example.png">
 </p>
 
