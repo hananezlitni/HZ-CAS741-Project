@@ -1,22 +1,22 @@
 # A Library of Simplex Method Solvers (LoSMS) Source Code
 
-##Dependencies
+## Dependencies
 
 The following has to be installed to run LoSMS:
 
 1. Python3
-2. pip ()
+2. pip
 
 ```sh
 $ sudo apt-get install python3-pip
 ```
-3. NumPy ()
+3. NumPy
 
 ```sh
 $ sudo apt-get install python3-numpy
 ```
 
-##Run LoSMS
+## Run LoSMS
 
 The syntax for running LoSMS is:
 
@@ -24,14 +24,14 @@ The syntax for running LoSMS is:
 $ python3 Driver.py -lc "[[a1,a2,...],[b1,b2,...],...]" -const "[k1,k2,...]" -ob "[x1,x2,...]" -g "max/min"
 ```
 
-Where:
+where:
 
 - lc = the coefficients of the linear constraints
 - const = the constants (Ax <= const)
 - ob = the coefficients of the objective function
 - g = the goal (max or min)
 
-##Example
+## Example
 
 To solve the following linear program:
 
